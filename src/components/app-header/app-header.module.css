@@ -1,0 +1,40 @@
+.header {
+  background-color: #1C1C21;
+  box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  display: flex;
+  justify-content: center;
+  padding: 0 40px;
+}
+
+.header__container {
+  width: 1280px;
+  min-height: 88px;
+  display: grid;
+  grid-template-columns: 1fr min-content 1fr;
+  align-content: center;
+}
+
+.header__navigation {
+  display: flex;
+}
+
+.header__link {
+  color: inherit;
+  text-decoration: none;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  transition: all .2s linear;
+}
+
+.header__link:hover {
+  opacity: .6;
+}
+
+.header__link:active {
+  opacity: .3;
+}
+
+.header__link_disabled {
+  pointer-events: none;
+}
