@@ -1,8 +1,9 @@
 import styles from "./modal-overlay.module.css";
 
 function ModalOverlay() {
-  return 
+  return (
     <div className={styles.overlay}></div>
+  );
 }
 
 export default ModalOverlay;
