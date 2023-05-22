@@ -21,7 +21,7 @@ import Modal from "../modal/modal";
 function BurgerIngridients(props) {
   const [current, setCurrent] = useState('one');
   const [modalVisible, setModalVisible] = useState(false);
-  // const [modalData, setModalData] = useState({});
+  const [modalData, setModalData] = useState({});
   
   const ingridients = props.data; 
   
@@ -29,8 +29,9 @@ function BurgerIngridients(props) {
   const sauces = ingridients.filter(item => item.type === 'sauce');
   const mains = ingridients.filter(item => item.type === 'main');
 
-  const openModal = () => {
+  const openModal = (element) => {
     setModalVisible(true);
+    setModalData(element);
   }
 
   const closeModal =() => {
@@ -43,7 +44,7 @@ function BurgerIngridients(props) {
       <li key={element._id} className={styles.ingridients__item} 
         onClick={
           // (evt) => renderCounter(evt)
-          () => openModal()
+          () => openModal(element)
         }>
         <img src={element.image} alt={element.name} className="pr-4 pl-4"/>
         <div className={`${styles.ingridients__price} mt-1`}>
@@ -98,7 +99,7 @@ function BurgerIngridients(props) {
 
       </ul>
 
-      <Modal modalActive={modalVisible} closeModal={closeModal} />
+      <Modal modalActive={modalVisible} closeModal={closeModal} modalData={modalData} />
 
     </section>
   );

@@ -37,7 +37,7 @@ function App() {
     };
     
     getData();
-  },  [baseUrl]);
+  },  []);
 
   const { data, isLoading, hasError } = state;
 
