@@ -10,6 +10,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import Modal from "../modal/modal";
+import IngridientDetails from "../ingridient-details/ingridient-details";
 
 // const renderCounter = (evt) => {
 //   const element = evt.target.closest('li');
@@ -99,7 +100,9 @@ function BurgerIngridients(props) {
 
       </ul>
 
-      <Modal modalActive={modalVisible} closeModal={closeModal} modalData={modalData} />
+      <Modal modalActive={modalVisible} closeModal={closeModal}>
+        <IngridientDetails modalData={modalData} />
+      </Modal>
 
     </section>
   );

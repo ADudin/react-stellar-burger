@@ -1,4 +1,5 @@
 import styles from "./burger-constructor.module.css";
+import { useState } from "react";
 import propTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
 
@@ -8,6 +9,9 @@ import {
   CurrencyIcon,
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components';
+
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
 
 const getTotalPrice = (items) => {
   let totalPrice = 0;
@@ -19,12 +23,22 @@ const getTotalPrice = (items) => {
 }
 
 function BurgerConstructor(props) {
+  const [modalVisible, setModalVisible] = useState(false);
+
   const burgerComponents = props.data;
 
   const bun = burgerComponents.find(item => item.type === 'bun');
   const fillingComponents = burgerComponents.filter(item => item.type !== 'bun');
 
   const totalPrice = getTotalPrice(burgerComponents);
+
+  const openModal = (element) => {
+    setModalVisible(true);
+  }
+
+  const closeModal =() => {
+    setModalVisible(false);
+  }
 
   return (
     <section className={styles.burgerConstructor}>
@@ -71,15 +85,19 @@ function BurgerConstructor(props) {
             <p className="text text_type_digits-medium">{totalPrice}</p>
             <CurrencyIcon type="primary" />
           </div>
-          <Button htmlType="button" type="primary" size="large">
+          <Button onClick={openModal} htmlType="button" type="primary" size="large">
             Оформить заказ
           </Button>
         </div>
 
       </div>
 
+      <Modal modalActive={modalVisible} closeModal={closeModal}>
+        <OrderDetails />
+      </Modal>
+
     </section>
-  )
+  );
 }
 
 BurgerConstructor.propTypes = {

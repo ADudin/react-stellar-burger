@@ -1,4 +1,5 @@
 import styles from "./ingridient-details.module.css";
+import { ingredientPropType } from "../../utils/prop-types";
 
 function IngridientDetails(props) {
   const { modalData } = props;
@@ -30,6 +31,10 @@ function IngridientDetails(props) {
       </div>
     </>
   )
+}
+
+IngridientDetails.propTypes = {
+  modalData: ingredientPropType
 }
 
 export default IngridientDetails;
