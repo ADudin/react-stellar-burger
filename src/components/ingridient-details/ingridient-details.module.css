@@ -1,0 +1,35 @@
+.title {
+  max-width: 580px;
+}
+
+.container {
+  width: 520px;
+  margin: 0 auto;
+}
+
+.image {
+  width: 520px;
+  height: 240px;
+  object-fit: contain;
+}
+
+.description {
+  text-align: center;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.listItem {
+  /* color: #8585AD; */
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 8px
+}
