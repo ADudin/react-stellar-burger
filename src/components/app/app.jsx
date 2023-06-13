@@ -2,12 +2,17 @@ import styles from "./app.module.css";
 
 import { 
   useState,
-  useEffect
+  useEffect,
 } from "react";
 
 import AppHeader from "../app-header/app-header";
 import BurgerIngridients from "../burger-ingridients/burger-ingridients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
+
+import { 
+  BurgerIngridientsContext,
+  BunIngridientContext
+} from "../../services/burger-constructor-context";
 
 const baseUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -17,6 +22,9 @@ function App() {
     hasError: false,
     data: []
   });
+
+  const [addedIngridients, setAddedIngridients] = useState([]);
+  const [addedBun, setAddedBun] = useState(null);
 
   useEffect(() => {
 
@@ -32,7 +40,7 @@ function App() {
         .then(res => setState({ ...state, data: res.data, isLoading: false }))
         .catch(error => {
           console.log(error);
-          setState({ ...state, hasError: true, isLoading: false })
+          setState({ ...state, hasError: true, isLoading: false });
         })
     };
     
@@ -40,19 +48,23 @@ function App() {
   },  []);
 
   const { data, isLoading, hasError } = state;
-
+  
   return (
     <div className={styles.app}>
-      <AppHeader />
-      <main className={styles.app__main}>
-        {
-        !isLoading && !hasError && data.length &&
-        <>
-          <BurgerIngridients data={data} />
-          <BurgerConstructor data={data} />
-        </>
-        }
-      </main>
+      <BunIngridientContext.Provider value={{addedBun, setAddedBun}}>
+        <BurgerIngridientsContext.Provider value={{addedIngridients, setAddedIngridients}}>
+          <AppHeader />
+          <main className={styles.app__main}>
+            {
+            !isLoading && !hasError && data.length &&
+            <>
+              <BurgerIngridients data={data} />
+              <BurgerConstructor />
+            </>
+            }
+          </main>
+        </BurgerIngridientsContext.Provider>
+      </BunIngridientContext.Provider>
     </div>
   );
 }

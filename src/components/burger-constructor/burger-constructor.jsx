@@ -1,7 +1,5 @@
 import styles from "./burger-constructor.module.css";
-import { useState } from "react";
-import propTypes from "prop-types";
-import { ingredientPropType } from "../../utils/prop-types";
+import { useState, useContext } from "react";
 
 import { 
   ConstructorElement,
@@ -13,6 +11,11 @@ import {
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 
+import { 
+  BurgerIngridientsContext,
+  BunIngridientContext
+} from "../../services/burger-constructor-context";
+
 const getTotalPrice = (items) => {
   let totalPrice = 0;
   items.forEach((item) => {
@@ -22,21 +25,22 @@ const getTotalPrice = (items) => {
   return totalPrice;
 }
 
-function BurgerConstructor(props) {
+function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
+  const { addedIngridients } = useContext(BurgerIngridientsContext);
+  const { addedBun } = useContext(BunIngridientContext);
 
-  const burgerComponents = props.data;
+  const burgerComponents = addedIngridients;
+  const bun = addedBun;
 
-  const bun = burgerComponents.find(item => item.type === 'bun');
   const fillingComponents = burgerComponents.filter(item => item.type !== 'bun');
+  const totalPrice = bun === null ? getTotalPrice(burgerComponents) : getTotalPrice(burgerComponents) + bun.price;
 
-  const totalPrice = getTotalPrice(burgerComponents);
-
-  const openModal = (element) => {
+  const openModal = () => {
     setModalVisible(true);
   }
 
-  const closeModal =() => {
+  const closeModal = () => {
     setModalVisible(false);
   }
 
@@ -45,14 +49,16 @@ function BurgerConstructor(props) {
 
       <div className={`${styles.burgerConstructor__container} mt-25 pl-4`}>
 
-        <ConstructorElement
+        {
+          bun && <ConstructorElement
           type="top"
           isLocked={true}
           text={`${bun.name} (верх)`}
           price={bun.price}
           thumbnail={bun.image}
           extraClass="mb-1 ml-8"
-        />
+          />
+        }
 
         <ul className={`${styles.burgerConstructor__list} custom-scroll`}>
           {
@@ -71,14 +77,16 @@ function BurgerConstructor(props) {
           }
         </ul>
 
-        <ConstructorElement
+        {
+          bun && <ConstructorElement
           type="bottom"
           isLocked={true}
           text={`${bun.name} (низ)`}
           price={bun.price}
           thumbnail={bun.image}
           extraClass="mt-1 ml-8"
-        />
+          />
+        }
 
         <div className={`${styles.burgerConstructor__info} mt-9 pr-4`}>
           <div className={`${styles.burgerConstructor__price} mr-10`}>
@@ -98,10 +106,6 @@ function BurgerConstructor(props) {
 
     </section>
   );
-}
-
-BurgerConstructor.propTypes = {
-  data: propTypes.arrayOf(ingredientPropType)
 }
 
 export default BurgerConstructor;
