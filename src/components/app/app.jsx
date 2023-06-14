@@ -3,6 +3,7 @@ import styles from "./app.module.css";
 import { 
   useState,
   useEffect,
+  useReducer
 } from "react";
 
 import AppHeader from "../app-header/app-header";
@@ -11,10 +12,26 @@ import BurgerConstructor from "../burger-constructor/burger-constructor";
 
 import { 
   BurgerIngridientsContext,
-  BunIngridientContext
+  BunIngridientContext,
+  PriceContext
 } from "../../services/burger-constructor-context";
 
 const baseUrl = 'https://norma.nomoreparties.space/api/ingredients';
+
+const totalPriceInitialState = {count: 0};
+
+function reducer(state = totalPriceInitialState, action) {
+  switch (action.type) {
+    case 'add':
+      return {count: state.count + action.payload};
+    case 'remove':
+      return {count: state.count - action.payload};
+    case 'reset':
+      return totalPriceInitialState;
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+}
 
 function App() {
   const [state, setState] = useState({
@@ -25,6 +42,7 @@ function App() {
 
   const [addedIngridients, setAddedIngridients] = useState([]);
   const [addedBun, setAddedBun] = useState(null);
+  const [totalPriceState, totalPriceDispatch] = useReducer(reducer, totalPriceInitialState);
 
   useEffect(() => {
 
@@ -53,16 +71,18 @@ function App() {
     <div className={styles.app}>
       <BunIngridientContext.Provider value={{addedBun, setAddedBun}}>
         <BurgerIngridientsContext.Provider value={{addedIngridients, setAddedIngridients}}>
-          <AppHeader />
-          <main className={styles.app__main}>
-            {
-            !isLoading && !hasError && data.length &&
-            <>
-              <BurgerIngridients data={data} />
-              <BurgerConstructor />
-            </>
-            }
-          </main>
+          <PriceContext.Provider value={{totalPriceState, totalPriceDispatch}}>
+            <AppHeader />
+            <main className={styles.app__main}>
+              {
+              !isLoading && !hasError && data.length &&
+              <>
+                <BurgerIngridients data={data} />
+                <BurgerConstructor />
+              </>
+              }
+            </main>
+          </PriceContext.Provider>
         </BurgerIngridientsContext.Provider>
       </BunIngridientContext.Provider>
     </div>

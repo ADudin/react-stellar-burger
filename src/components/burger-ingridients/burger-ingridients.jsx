@@ -2,7 +2,7 @@ import styles from "./burger-ingridients.module.css";
 
 import { 
   useState, 
-  useContext 
+  useContext,
 } from "react";
 
 import propTypes from "prop-types";
@@ -17,16 +17,19 @@ import BurgerIngridient from "../burger-ingridient/burger-ingridient";
 
 import { 
   BurgerIngridientsContext,
-  BunIngridientContext
-} from "../../services/burger-constructor-context"; 
-
+  BunIngridientContext,
+  PriceContext
+} from "../../services/burger-constructor-context";
 
 function BurgerIngridients(props) {
   const [current, setCurrent] = useState('one');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState({});
+  
+  
   const { addedIngridients, setAddedIngridients } = useContext(BurgerIngridientsContext);
-  const { setAddedBun } = useContext(BunIngridientContext);
+  const { addedBun, setAddedBun } = useContext(BunIngridientContext);
+  const { totalPriceDispatch } = useContext(PriceContext);
   
   const ingridients = props.data; 
   
@@ -37,11 +40,22 @@ function BurgerIngridients(props) {
   const openModal = (element) => {
     //setModalVisible(true);
     //setModalData(element);
-    if (element.type === 'bun') {
+
+    if (element.type === 'bun' && addedBun === null) {
       setAddedBun(element);
-    } else {
+      totalPriceDispatch({type: 'add', payload: element.price});
+    }
+
+    if (element.type === 'bun' && addedBun !== null) {
+      setAddedBun(element);
+      totalPriceDispatch({type: 'remove', payload: addedBun.price});
+      totalPriceDispatch({type: 'add', payload: element.price});
+    }
+
+    if (element.type !== 'bun') {
       const newElement = {...element, _id: uuidv4()};
       setAddedIngridients([...addedIngridients, newElement]);
+      totalPriceDispatch({type: 'add', payload: element.price});
     }
   };
 

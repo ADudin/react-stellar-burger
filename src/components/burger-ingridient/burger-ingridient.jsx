@@ -1,4 +1,7 @@
 import styles from "./burger-ingridient.module.css";
+import propTypes from "prop-types";
+import { ingredientPropType } from "../../utils/prop-types";
+
 import { 
   useState,
   useContext,
@@ -52,6 +55,11 @@ function BurgerIngridient(props) {
       }
     </li>
   );
+}
+
+BurgerIngridient.propTypes = {
+  item: ingredientPropType,
+  openModal: propTypes.func
 }
 
 export default BurgerIngridient;

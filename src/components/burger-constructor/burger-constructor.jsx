@@ -13,28 +13,21 @@ import OrderDetails from "../order-details/order-details";
 
 import { 
   BurgerIngridientsContext,
-  BunIngridientContext
+  BunIngridientContext,
+  PriceContext
 } from "../../services/burger-constructor-context";
-
-const getTotalPrice = (items) => {
-  let totalPrice = 0;
-  items.forEach((item) => {
-    totalPrice = totalPrice + item.price;
-  });
-
-  return totalPrice;
-}
 
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
   const { addedIngridients } = useContext(BurgerIngridientsContext);
   const { addedBun } = useContext(BunIngridientContext);
+  const { totalPriceState } = useContext(PriceContext);
 
   const burgerComponents = addedIngridients;
   const bun = addedBun;
+  const totalPrice = totalPriceState.count;
 
   const fillingComponents = burgerComponents.filter(item => item.type !== 'bun');
-  const totalPrice = bun === null ? getTotalPrice(burgerComponents) : getTotalPrice(burgerComponents) + bun.price;
 
   const openModal = () => {
     setModalVisible(true);
