@@ -40,7 +40,6 @@ function BurgerIngridients(props) {
     if (element.type === 'bun') {
       setAddedBun(element);
     } else {
-      console.log(element);
       const newElement = {...element, _id: uuidv4()};
       setAddedIngridients([...addedIngridients, newElement]);
     }

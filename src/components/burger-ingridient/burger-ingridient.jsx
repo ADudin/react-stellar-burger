@@ -1,7 +1,8 @@
 import styles from "./burger-ingridient.module.css";
 import { 
   useState,
-  useContext
+  useContext,
+  useEffect
  } from "react";
 
 import {
@@ -9,9 +10,22 @@ import {
   Counter
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { BunIngridientContext } from "../../services/burger-constructor-context";
+
 function BurgerIngridient(props) {
   const { item, openModal } = props;
   const [count, setCount] = useState(0);
+
+  const { addedBun } = useContext(BunIngridientContext);
+
+  useEffect(() => {
+    if (
+      item.type === 'bun' && 
+      addedBun !== null && 
+      item._id !== addedBun._id) {
+        setCount(0);
+    }
+  }, [addedBun]);
 
   const addIngridient = (item) => {
     openModal(item);
