@@ -1,5 +1,6 @@
 import styles from "./order-details.module.css";
 import orderConfirm from "../../images/orderConfirm.svg";
+import propTypes from "prop-types";
 
 function OrderDetails(props) {
 
@@ -14,6 +15,10 @@ function OrderDetails(props) {
       <p className="text text_type_main-default text_color_inactive mt-2">Дождитесь готовности на орбитальной станции</p>
     </div>
   );
+}
+
+OrderDetails.propTypes = {
+  orderNumber: propTypes.number
 }
 
 export default OrderDetails;
