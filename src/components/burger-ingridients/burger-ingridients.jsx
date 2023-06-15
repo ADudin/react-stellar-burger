@@ -6,7 +6,6 @@ import {
 } from "react";
 
 import propTypes from "prop-types";
-import { v4 as uuidv4 } from "uuid";
 import { ingredientPropType } from "../../utils/prop-types";
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -38,8 +37,8 @@ function BurgerIngridients(props) {
   const mains = ingridients.filter(item => item.type === 'main');
 
   const openModal = (element) => {
-    //setModalVisible(true);
-    //setModalData(element);
+    setModalVisible(true);
+    setModalData(element);
 
     if (element.type === 'bun' && addedBun === null) {
       setAddedBun(element);
@@ -53,8 +52,7 @@ function BurgerIngridients(props) {
     }
 
     if (element.type !== 'bun') {
-      const newElement = {...element, _id: uuidv4()};
-      setAddedIngridients([...addedIngridients, newElement]);
+      setAddedIngridients([...addedIngridients, element]);
       totalPriceDispatch({type: 'add', payload: element.price});
     }
   };

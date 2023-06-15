@@ -1,5 +1,6 @@
 import styles from "./burger-constructor.module.css";
 import { useState, useContext } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { 
   ConstructorElement,
@@ -17,11 +18,25 @@ import {
   PriceContext
 } from "../../services/burger-constructor-context";
 
+const orderPostUrl = 'https://norma.nomoreparties.space/api/orders';
+
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
   const { addedIngridients } = useContext(BurgerIngridientsContext);
   const { addedBun } = useContext(BunIngridientContext);
   const { totalPriceState } = useContext(PriceContext);
+
+  const [orderDataState, setOrderDataState] = useState({
+    isLoading: false,
+    hasError: false,
+    orderDetails: {
+      name: '',
+      order: {
+          number: null
+      },
+      success: false
+    }
+  });
 
   const burgerComponents = addedIngridients;
   const bun = addedBun;
@@ -30,6 +45,39 @@ function BurgerConstructor() {
   const fillingComponents = burgerComponents.filter(item => item.type !== 'bun');
 
   const openModal = () => {
+    
+    const postOrderData = () => {
+
+      const orderData = burgerComponents.map(item => item._id);
+      if (bun !== null) {
+        orderData.push(bun._id);
+      }
+
+      setOrderDataState({ ...orderDataState, isLoading: true, hasError: false });
+      
+      fetch(orderPostUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ingredients: orderData
+        })
+      })
+      .then(res => {
+        if(res.ok) {
+          return res.json()
+        }
+        return Promise.reject(`Ошибка ${res.status}`);
+      })
+      .then(res => setOrderDataState({ ...orderDataState, orderDetails: res, isLoading: false }))
+      .catch(error => {
+        console.log(error);
+        setOrderDataState({ ...orderDataState, hasError: true, isLoading: false });
+      })
+    }
+
+    postOrderData();
     setModalVisible(true);
   }
 
@@ -57,7 +105,7 @@ function BurgerConstructor() {
           {
             fillingComponents.map(item => {
               return (
-                <li className={styles.burgerConstructor__item} key={item._id}>
+                <li className={styles.burgerConstructor__item} key={uuidv4()}>
                   <DragIcon type="primary" />
                   <ConstructorElement
                     text={item.name}
@@ -94,7 +142,7 @@ function BurgerConstructor() {
       </div>
 
       <Modal modalActive={modalVisible} closeModal={closeModal}>
-        <OrderDetails />
+        <OrderDetails orderNumber={orderDataState.orderDetails.order.number} />
       </Modal>
 
     </section>
