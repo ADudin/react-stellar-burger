@@ -1,28 +1,35 @@
 import styles from "./burger-ingridients.module.css";
-import { useState } from "react";
+
+import { 
+  useState, 
+  useContext,
+  useEffect
+} from "react";
+
 import propTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
 
-import { 
-  Tab,
-  CurrencyIcon,
-  Counter
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import Modal from "../modal/modal";
 import IngridientDetails from "../ingridient-details/ingridient-details";
+import BurgerIngridient from "../burger-ingridient/burger-ingridient";
 
-// const renderCounter = (evt) => {
-//   const element = evt.target.closest('li');
-//   const counter = element.querySelector('.counter');
-  
-//   counter.classList.remove(styles.ingridients__hidden);
-// }
+import { 
+  BurgerIngridientsContext,
+  BunIngridientContext,
+  PriceContext
+} from "../../services/burger-constructor-context";
 
 function BurgerIngridients(props) {
   const [current, setCurrent] = useState('one');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState({});
+  
+  
+  const { addedIngridients, setAddedIngridients } = useContext(BurgerIngridientsContext);
+  const { addedBun, setAddedBun } = useContext(BunIngridientContext);
+  const { totalPriceDispatch } = useContext(PriceContext);
   
   const ingridients = props.data; 
   
@@ -33,29 +40,26 @@ function BurgerIngridients(props) {
   const openModal = (element) => {
     setModalVisible(true);
     setModalData(element);
-  }
+
+    if (element.type === 'bun' && addedBun === null) {
+      setAddedBun(element);
+      totalPriceDispatch({type: 'add', payload: element.price});
+    }
+
+    if (element.type === 'bun' && addedBun !== null) {
+      setAddedBun(element);
+      totalPriceDispatch({type: 'remove', payload: addedBun.price});
+      totalPriceDispatch({type: 'add', payload: element.price});
+    }
+
+    if (element.type !== 'bun') {
+      setAddedIngridients([...addedIngridients, element]);
+      totalPriceDispatch({type: 'add', payload: element.price});
+    }
+  };
 
   const closeModal =() => {
     setModalVisible(false);
-  }
-
-  const renderElement = (element) => {
-
-    return (
-      <li key={element._id} className={styles.ingridients__item} 
-        onClick={
-          // (evt) => renderCounter(evt)
-          () => openModal(element)
-        }>
-        <img src={element.image} alt={element.name} className="pr-4 pl-4"/>
-        <div className={`${styles.ingridients__price} mt-1`}>
-          <p className="text text_type_digits-default">{element.price}</p>
-          <CurrencyIcon type="primary" />
-        </div>
-        <p className={`${styles.ingridients__paragraph} text text_type_main-default mt-1`}>{element.name}</p>
-        <Counter count={1} size="default" extraClass={styles.ingridients__hidden} />
-      </li>
-    );
   }
 
   return (
@@ -80,21 +84,21 @@ function BurgerIngridients(props) {
         <li>
           <p className="text text_type_main-medium">Булки</p>
           <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
-            {buns.map(item => renderElement(item))}
+            {buns.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
           </ul>
         </li>
 
         <li className="mt-10">
           <p className="text text_type_main-medium">Соусы</p>
           <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
-            {sauces.map(item => renderElement(item))}
+            {sauces.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
           </ul>
         </li>
 
         <li className="mt-10">
           <p className="text text_type_main-medium">Начинки</p>
           <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
-            {mains.map(item => renderElement(item))}
+            {mains.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
           </ul>
         </li>
 
@@ -109,7 +113,7 @@ function BurgerIngridients(props) {
 }
 
 BurgerIngridients.propTypes = {
-  data: propTypes.arrayOf(ingredientPropType)
+  data: propTypes.arrayOf(ingredientPropType).isRequired
 }
 
 export default BurgerIngridients;

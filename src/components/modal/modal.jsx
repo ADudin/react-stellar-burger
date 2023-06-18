@@ -52,9 +52,9 @@ function Modal(props) {
 };
 
 Modal.propTypes = {
-  modalActive: propTypes.bool,
-  closeModal: propTypes.func,
-  children: propTypes.element
+  modalActive: propTypes.bool.isRequired,
+  closeModal: propTypes.func.isRequired,
+  children: propTypes.element.isRequired
 }
 
 export default Modal;

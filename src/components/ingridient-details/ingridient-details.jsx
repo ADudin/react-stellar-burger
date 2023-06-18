@@ -34,7 +34,7 @@ function IngridientDetails(props) {
 }
 
 IngridientDetails.propTypes = {
-  modalData: ingredientPropType
+  modalData: ingredientPropType.isRequired
 }
 
 export default IngridientDetails;

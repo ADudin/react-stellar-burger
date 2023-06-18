@@ -1,7 +1,6 @@
 import styles from "./burger-constructor.module.css";
-import { useState } from "react";
-import propTypes from "prop-types";
-import { ingredientPropType } from "../../utils/prop-types";
+import { useState, useContext } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { 
   ConstructorElement,
@@ -13,30 +12,76 @@ import {
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 
-const getTotalPrice = (items) => {
-  let totalPrice = 0;
-  items.forEach((item) => {
-    totalPrice = totalPrice + item.price;
+import { 
+  BurgerIngridientsContext,
+  BunIngridientContext,
+  PriceContext
+} from "../../services/burger-constructor-context";
+
+const orderPostUrl = 'https://norma.nomoreparties.space/api/orders';
+
+function BurgerConstructor() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const { addedIngridients } = useContext(BurgerIngridientsContext);
+  const { addedBun } = useContext(BunIngridientContext);
+  const { totalPriceState } = useContext(PriceContext);
+
+  const [orderDataState, setOrderDataState] = useState({
+    isLoading: false,
+    hasError: false,
+    orderDetails: {
+      name: '',
+      order: {
+          number: 0
+      },
+      success: false
+    }
   });
 
-  return totalPrice;
-}
+  const burgerComponents = addedIngridients;
+  const bun = addedBun;
+  const totalPrice = totalPriceState.count;
 
-function BurgerConstructor(props) {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const burgerComponents = props.data;
-
-  const bun = burgerComponents.find(item => item.type === 'bun');
   const fillingComponents = burgerComponents.filter(item => item.type !== 'bun');
 
-  const totalPrice = getTotalPrice(burgerComponents);
+  const openModal = () => {
+    
+    const postOrderData = () => {
 
-  const openModal = (element) => {
+      const orderData = burgerComponents.map(item => item._id);
+      if (bun !== 0) {
+        orderData.push(bun._id);
+      }
+
+      setOrderDataState({ ...orderDataState, isLoading: true, hasError: false });
+      
+      fetch(orderPostUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ingredients: orderData
+        })
+      })
+      .then(res => {
+        if(res.ok) {
+          return res.json()
+        }
+        return Promise.reject(`Ошибка ${res.status}`);
+      })
+      .then(res => setOrderDataState({ ...orderDataState, orderDetails: res, isLoading: false }))
+      .catch(error => {
+        console.log(error);
+        setOrderDataState({ ...orderDataState, hasError: true, isLoading: false });
+      })
+    }
+
+    postOrderData();
     setModalVisible(true);
   }
 
-  const closeModal =() => {
+  const closeModal = () => {
     setModalVisible(false);
   }
 
@@ -45,20 +90,22 @@ function BurgerConstructor(props) {
 
       <div className={`${styles.burgerConstructor__container} mt-25 pl-4`}>
 
-        <ConstructorElement
+        {
+          bun && <ConstructorElement
           type="top"
           isLocked={true}
           text={`${bun.name} (верх)`}
           price={bun.price}
           thumbnail={bun.image}
           extraClass="mb-1 ml-8"
-        />
+          />
+        }
 
         <ul className={`${styles.burgerConstructor__list} custom-scroll`}>
           {
             fillingComponents.map(item => {
               return (
-                <li className={styles.burgerConstructor__item} key={item._id}>
+                <li className={styles.burgerConstructor__item} key={uuidv4()}>
                   <DragIcon type="primary" />
                   <ConstructorElement
                     text={item.name}
@@ -71,14 +118,16 @@ function BurgerConstructor(props) {
           }
         </ul>
 
-        <ConstructorElement
+        {
+          bun && <ConstructorElement
           type="bottom"
           isLocked={true}
           text={`${bun.name} (низ)`}
           price={bun.price}
           thumbnail={bun.image}
           extraClass="mt-1 ml-8"
-        />
+          />
+        }
 
         <div className={`${styles.burgerConstructor__info} mt-9 pr-4`}>
           <div className={`${styles.burgerConstructor__price} mr-10`}>
@@ -93,15 +142,11 @@ function BurgerConstructor(props) {
       </div>
 
       <Modal modalActive={modalVisible} closeModal={closeModal}>
-        <OrderDetails />
+        <OrderDetails orderNumber={orderDataState.orderDetails.order.number} />
       </Modal>
 
     </section>
   );
-}
-
-BurgerConstructor.propTypes = {
-  data: propTypes.arrayOf(ingredientPropType)
 }
 
 export default BurgerConstructor;
