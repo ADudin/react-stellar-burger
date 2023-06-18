@@ -3,6 +3,7 @@ import styles from "./burger-ingridients.module.css";
 import { 
   useState, 
   useContext,
+  useEffect
 } from "react";
 
 import propTypes from "prop-types";
@@ -112,7 +113,7 @@ function BurgerIngridients(props) {
 }
 
 BurgerIngridients.propTypes = {
-  data: propTypes.arrayOf(ingredientPropType)
+  data: propTypes.arrayOf(ingredientPropType).isRequired
 }
 
 export default BurgerIngridients;

@@ -58,8 +58,8 @@ function BurgerIngridient(props) {
 }
 
 BurgerIngridient.propTypes = {
-  item: ingredientPropType,
-  openModal: propTypes.func
+  item: ingredientPropType.isRequired,
+  openModal: propTypes.func.isRequired
 }
 
 export default BurgerIngridient;

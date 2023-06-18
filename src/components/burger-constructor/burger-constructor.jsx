@@ -32,7 +32,7 @@ function BurgerConstructor() {
     orderDetails: {
       name: '',
       order: {
-          number: null
+          number: 0
       },
       success: false
     }
@@ -49,7 +49,7 @@ function BurgerConstructor() {
     const postOrderData = () => {
 
       const orderData = burgerComponents.map(item => item._id);
-      if (bun !== null) {
+      if (bun !== 0) {
         orderData.push(bun._id);
       }
 

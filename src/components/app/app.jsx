@@ -3,7 +3,8 @@ import styles from "./app.module.css";
 import { 
   useState,
   useEffect,
-  useReducer
+  useReducer,
+  useMemo
 } from "react";
 
 import AppHeader from "../app-header/app-header";
@@ -66,12 +67,24 @@ function App() {
   },  []);
 
   const { data, isLoading, hasError } = state;
-  
+
+  const bunIngridientContextValue = useMemo(() => {
+    return {addedBun, setAddedBun};
+  }, [addedBun, setAddedBun]);
+
+  const burgerIngridientsContextValue = useMemo(() => {
+    return {addedIngridients, setAddedIngridients};
+  }, [addedIngridients, setAddedIngridients]);
+
+  const priceContextValue = useMemo(() => {
+    return {totalPriceState, totalPriceDispatch};
+  }, [totalPriceState, totalPriceDispatch]);
+
   return (
     <div className={styles.app}>
-      <BunIngridientContext.Provider value={{addedBun, setAddedBun}}>
-        <BurgerIngridientsContext.Provider value={{addedIngridients, setAddedIngridients}}>
-          <PriceContext.Provider value={{totalPriceState, totalPriceDispatch}}>
+      <BunIngridientContext.Provider value={bunIngridientContextValue}>
+        <BurgerIngridientsContext.Provider value={burgerIngridientsContextValue}>
+          <PriceContext.Provider value={priceContextValue}>
             <AppHeader />
             <main className={styles.app__main}>
               {
