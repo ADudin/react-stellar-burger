@@ -6,8 +6,8 @@ import {
   useEffect
 } from "react";
 
-import propTypes from "prop-types";
-import { ingredientPropType } from "../../utils/prop-types";
+//import propTypes from "prop-types";
+//import { ingredientPropType } from "../../utils/prop-types";
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -21,7 +21,17 @@ import {
   PriceContext
 } from "../../services/burger-constructor-context";
 
-function BurgerIngridients(props) {
+import { useDispatch, useSelector } from "react-redux";
+import { getItems } from "../../services/actions/ingridients";
+
+function BurgerIngridients() {
+  const { items, itemsRequest } = useSelector(state => state.ingridients); // add loader component for itemsRequest
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getItems());
+  }, [dispatch]);
+  
   const [current, setCurrent] = useState('one');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState({});
@@ -31,11 +41,15 @@ function BurgerIngridients(props) {
   const { addedBun, setAddedBun } = useContext(BunIngridientContext);
   const { totalPriceDispatch } = useContext(PriceContext);
   
-  const ingridients = props.data; 
+  //const ingridients = props.data; 
   
-  const buns = ingridients.filter(item => item.type === 'bun');
-  const sauces = ingridients.filter(item => item.type === 'sauce');
-  const mains = ingridients.filter(item => item.type === 'main');
+  // const buns = ingridients.filter(item => item.type === 'bun');
+  // const sauces = ingridients.filter(item => item.type === 'sauce');
+  // const mains = ingridients.filter(item => item.type === 'main');
+
+  const buns = items.filter(item => item.type === 'bun');
+  const sauces = items.filter(item => item.type === 'sauce');
+  const mains = items.filter(item => item.type === 'main');
 
   const openModal = (element) => {
     setModalVisible(true);
@@ -112,8 +126,8 @@ function BurgerIngridients(props) {
   );
 }
 
-BurgerIngridients.propTypes = {
-  data: propTypes.arrayOf(ingredientPropType).isRequired
-}
+// BurgerIngridients.propTypes = {
+//   data: propTypes.arrayOf(ingredientPropType).isRequired
+// }
 
 export default BurgerIngridients;
