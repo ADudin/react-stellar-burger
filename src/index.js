@@ -14,6 +14,7 @@ import {
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import { ingridientsReducer } from "./services/reducers/ingridients";
+import { ingridientReducer } from "./services/reducers/ingridient";
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -23,7 +24,8 @@ const composeEnhancers =
 const enhancer = composeEnhancers(applyMiddleware(thunk))
 
 const rootReducer = combineReducers({
-  ingridients: ingridientsReducer
+  ingridients: ingridientsReducer,
+  currentIngridient: ingridientReducer
 });
 
 const store = createStore(rootReducer, enhancer);

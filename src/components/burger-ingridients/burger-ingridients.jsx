@@ -6,9 +6,6 @@ import {
   useEffect
 } from "react";
 
-//import propTypes from "prop-types";
-//import { ingredientPropType } from "../../utils/prop-types";
-
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import Modal from "../modal/modal";
@@ -23,9 +20,11 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { getItems } from "../../services/actions/ingridients";
+import { showItem, hideItem } from "../../services/actions/ingridient";
+import { Loader } from "../loader/loader";
 
 function BurgerIngridients() {
-  const { items, itemsRequest } = useSelector(state => state.ingridients); // add loader component for itemsRequest
+  const { items, itemsRequest } = useSelector(state => state.ingridients);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,26 +33,18 @@ function BurgerIngridients() {
   
   const [current, setCurrent] = useState('one');
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalData, setModalData] = useState({});
-  
   
   const { addedIngridients, setAddedIngridients } = useContext(BurgerIngridientsContext);
   const { addedBun, setAddedBun } = useContext(BunIngridientContext);
   const { totalPriceDispatch } = useContext(PriceContext);
   
-  //const ingridients = props.data; 
-  
-  // const buns = ingridients.filter(item => item.type === 'bun');
-  // const sauces = ingridients.filter(item => item.type === 'sauce');
-  // const mains = ingridients.filter(item => item.type === 'main');
-
   const buns = items.filter(item => item.type === 'bun');
   const sauces = items.filter(item => item.type === 'sauce');
   const mains = items.filter(item => item.type === 'main');
 
   const openModal = (element) => {
+    dispatch(showItem(element));
     setModalVisible(true);
-    setModalData(element);
 
     if (element.type === 'bun' && addedBun === null) {
       setAddedBun(element);
@@ -74,6 +65,11 @@ function BurgerIngridients() {
 
   const closeModal =() => {
     setModalVisible(false);
+    // setTimeout for smooth popup closing,
+    // otherwise content will disappear before popup will close
+    setTimeout(() => {
+      dispatch(hideItem());
+    }, 450);
   }
 
   return (
@@ -93,41 +89,40 @@ function BurgerIngridients() {
         </Tab>
       </div>
 
-      <ul className={`${styles.ingridients__types} mt-10 custom-scroll`}>
+      {
+        itemsRequest ? <Loader size="large" inverse={true} /> :
+        <ul className={`${styles.ingridients__types} mt-10 custom-scroll`}>
 
-        <li>
-          <p className="text text_type_main-medium">Булки</p>
-          <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
-            {buns.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
-          </ul>
-        </li>
+          <li>
+            <p className="text text_type_main-medium">Булки</p>
+            <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
+              {buns.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
+            </ul>
+          </li>
 
-        <li className="mt-10">
-          <p className="text text_type_main-medium">Соусы</p>
-          <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
-            {sauces.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
-          </ul>
-        </li>
+          <li className="mt-10">
+            <p className="text text_type_main-medium">Соусы</p>
+            <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
+              {sauces.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
+            </ul>
+          </li>
 
-        <li className="mt-10">
-          <p className="text text_type_main-medium">Начинки</p>
-          <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
-            {mains.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
-          </ul>
-        </li>
+          <li className="mt-10">
+            <p className="text text_type_main-medium">Начинки</p>
+            <ul className={`${styles.ingridients__items} pt-6 pr-4 pl-4`}>
+              {mains.map(item => <BurgerIngridient key={item._id} item={item} openModal={() => openModal(item)} />)}
+            </ul>
+          </li>
 
-      </ul>
+        </ul>
+      }
 
       <Modal modalActive={modalVisible} closeModal={closeModal}>
-        <IngridientDetails modalData={modalData} />
+        <IngridientDetails />
       </Modal>
 
     </section>
   );
 }
-
-// BurgerIngridients.propTypes = {
-//   data: propTypes.arrayOf(ingredientPropType).isRequired
-// }
 
 export default BurgerIngridients;
