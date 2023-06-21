@@ -4,40 +4,49 @@ import { ingredientPropType } from "../../utils/prop-types";
 
 import { 
   useState,
-  useContext,
   useEffect
- } from "react";
+} from "react";
 
 import {
   CurrencyIcon,
   Counter
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { BunIngridientContext } from "../../services/burger-constructor-context";
+import { v4 as uuidv4 } from "uuid";
+import { addItem, removeItem } from "../../services/actions/burger-constructor";
+import { useSelector, useDispatch } from "react-redux";
 
 function BurgerIngridient(props) {
   const { item, openModal } = props;
   const [count, setCount] = useState(0);
 
-  const { addedBun } = useContext(BunIngridientContext);
-
-  useEffect(() => {
-    if (
-      item.type === 'bun' && 
-      addedBun !== null && 
-      item._id !== addedBun._id) {
-        setCount(0);
-    }
-  }, [addedBun]);
+  const dispatch = useDispatch();
+  const addedItems = useSelector(state => state.addedIngridients);
 
   const addIngridient = (item) => {
-    openModal(item);
-    if (item.type === 'bun') {
-      setCount(1);
-    } else {
-      setCount(count + 1);
+    const addedItem = { ...item, key: uuidv4()}
+
+    if (addedItem.type === 'bun' && addedItems.bun !== null) {
+      dispatch(removeItem(addedItems.bun));
     }
+    
+    dispatch(addItem(addedItem));
+    openModal(addedItem);
   }
+
+  useEffect(() => {
+    if (item.type === 'bun' && addedItems.bun !== null && item._id === addedItems.bun._id) {
+      setCount(1);
+    }
+
+    if (item.type === 'bun' && addedItems.bun !== null && item._id !== addedItems.bun._id) {
+      setCount(0);
+    }
+    
+    if (item.type !== 'bun') {
+      return setCount(addedItems.ingridients.filter(ingridient => ingridient._id === item._id).length);
+    };
+  }, [addedItems, item._id, item.type]);
   
   return (
     <li key={item._id} className={styles.ingridients__item} 

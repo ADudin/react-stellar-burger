@@ -2,7 +2,6 @@ import styles from "./burger-ingridients.module.css";
 
 import { 
   useState, 
-  useContext,
   useEffect
 } from "react";
 
@@ -11,13 +10,6 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from "../modal/modal";
 import IngridientDetails from "../ingridient-details/ingridient-details";
 import BurgerIngridient from "../burger-ingridient/burger-ingridient";
-
-import { 
-  BurgerIngridientsContext,
-  BunIngridientContext,
-  PriceContext
-} from "../../services/burger-constructor-context";
-
 import { useDispatch, useSelector } from "react-redux";
 import { getItems } from "../../services/actions/ingridients";
 import { showItem, hideItem } from "../../services/actions/ingridient";
@@ -34,10 +26,6 @@ function BurgerIngridients() {
   const [current, setCurrent] = useState('one');
   const [modalVisible, setModalVisible] = useState(false);
   
-  const { addedIngridients, setAddedIngridients } = useContext(BurgerIngridientsContext);
-  const { addedBun, setAddedBun } = useContext(BunIngridientContext);
-  const { totalPriceDispatch } = useContext(PriceContext);
-  
   const buns = items.filter(item => item.type === 'bun');
   const sauces = items.filter(item => item.type === 'sauce');
   const mains = items.filter(item => item.type === 'main');
@@ -45,22 +33,6 @@ function BurgerIngridients() {
   const openModal = (element) => {
     dispatch(showItem(element));
     setModalVisible(true);
-
-    if (element.type === 'bun' && addedBun === null) {
-      setAddedBun(element);
-      totalPriceDispatch({type: 'add', payload: element.price});
-    }
-
-    if (element.type === 'bun' && addedBun !== null) {
-      setAddedBun(element);
-      totalPriceDispatch({type: 'remove', payload: addedBun.price});
-      totalPriceDispatch({type: 'add', payload: element.price});
-    }
-
-    if (element.type !== 'bun') {
-      setAddedIngridients([...addedIngridients, element]);
-      totalPriceDispatch({type: 'add', payload: element.price});
-    }
   };
 
   const closeModal =() => {

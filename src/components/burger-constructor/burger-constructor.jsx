@@ -1,6 +1,6 @@
 import styles from "./burger-constructor.module.css";
-import { useState, useContext } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useState, useContext, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { 
   ConstructorElement,
@@ -13,18 +13,23 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 
 import { 
-  BurgerIngridientsContext,
-  BunIngridientContext,
-  PriceContext
+  BurgerIngridientsContext
 } from "../../services/burger-constructor-context";
+
+import { removeItem } from "../../services/actions/burger-constructor";
 
 const orderPostUrl = 'https://norma.nomoreparties.space/api/orders';
 
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
   const { addedIngridients } = useContext(BurgerIngridientsContext);
-  const { addedBun } = useContext(BunIngridientContext);
-  const { totalPriceState } = useContext(PriceContext);
+
+  const addedItems = useSelector(state => state.addedIngridients);
+  const dispatch = useDispatch();
+
+  const burgerComponents = addedIngridients;
+  const bun = addedItems.bun;
+  const fillingComponents = addedItems.ingridients;
 
   const [orderDataState, setOrderDataState] = useState({
     isLoading: false,
@@ -38,11 +43,20 @@ function BurgerConstructor() {
     }
   });
 
-  const burgerComponents = addedIngridients;
-  const bun = addedBun;
-  const totalPrice = totalPriceState.count;
+  const totalPrice = useMemo(() => {
+    
+    const fillingComponentsTotalPrice = fillingComponents.reduce((acc, item) => {
+      return acc + item.price;
+    }, 0);
 
-  const fillingComponents = burgerComponents.filter(item => item.type !== 'bun');
+    let bunPrice = 0;
+
+    if (bun !== null) {
+      bunPrice = bun.price;
+    }
+
+    return fillingComponentsTotalPrice + bunPrice;
+  }, [addedItems]);
 
   const openModal = () => {
     
@@ -105,12 +119,15 @@ function BurgerConstructor() {
           {
             fillingComponents.map(item => {
               return (
-                <li className={styles.burgerConstructor__item} key={uuidv4()}>
+                <li className={styles.burgerConstructor__item} key={item.key} >
                   <DragIcon type="primary" />
                   <ConstructorElement
                     text={item.name}
                     price={item.price}
                     thumbnail={item.image}
+                    handleClose={() => {
+                      dispatch(removeItem(item));
+                    }}
                   />
                 </li>
               )

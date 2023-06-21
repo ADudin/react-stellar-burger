@@ -15,6 +15,7 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import { ingridientsReducer } from "./services/reducers/ingridients";
 import { ingridientReducer } from "./services/reducers/ingridient";
+import { burgerConstructorReducer } from "./services/reducers/burger-constructor";
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -25,7 +26,8 @@ const enhancer = composeEnhancers(applyMiddleware(thunk))
 
 const rootReducer = combineReducers({
   ingridients: ingridientsReducer,
-  currentIngridient: ingridientReducer
+  currentIngridient: ingridientReducer,
+  addedIngridients: burgerConstructorReducer
 });
 
 const store = createStore(rootReducer, enhancer);
