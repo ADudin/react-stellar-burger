@@ -1,5 +1,5 @@
 import styles from "./burger-constructor.module.css";
-import { useState, useContext, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { 
@@ -11,37 +11,18 @@ import {
 
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-
-import { 
-  BurgerIngridientsContext
-} from "../../services/burger-constructor-context";
-
+import { Loader } from "../loader/loader";
 import { removeItem } from "../../services/actions/burger-constructor";
-
-const orderPostUrl = 'https://norma.nomoreparties.space/api/orders';
+import { sendOrder } from "../../services/actions/order";
 
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
-  const { addedIngridients } = useContext(BurgerIngridientsContext);
 
   const addedItems = useSelector(state => state.addedIngridients);
+  const { orderRequest } = useSelector(state => state.order);
   const dispatch = useDispatch();
-
-  const burgerComponents = addedIngridients;
   const bun = addedItems.bun;
   const fillingComponents = addedItems.ingridients;
-
-  const [orderDataState, setOrderDataState] = useState({
-    isLoading: false,
-    hasError: false,
-    orderDetails: {
-      name: '',
-      order: {
-          number: 0
-      },
-      success: false
-    }
-  });
 
   const totalPrice = useMemo(() => {
     
@@ -59,39 +40,13 @@ function BurgerConstructor() {
   }, [addedItems]);
 
   const openModal = () => {
+    const orderData = fillingComponents.map(item => item._id);
     
-    const postOrderData = () => {
-
-      const orderData = burgerComponents.map(item => item._id);
-      if (bun !== 0) {
-        orderData.push(bun._id);
-      }
-
-      setOrderDataState({ ...orderDataState, isLoading: true, hasError: false });
-      
-      fetch(orderPostUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ingredients: orderData
-        })
-      })
-      .then(res => {
-        if(res.ok) {
-          return res.json()
-        }
-        return Promise.reject(`Ошибка ${res.status}`);
-      })
-      .then(res => setOrderDataState({ ...orderDataState, orderDetails: res, isLoading: false }))
-      .catch(error => {
-        console.log(error);
-        setOrderDataState({ ...orderDataState, hasError: true, isLoading: false });
-      })
+    if (bun !== null) {
+      orderData.push(bun._id);
     }
 
-    postOrderData();
+    dispatch(sendOrder(orderData));
     setModalVisible(true);
   }
 
@@ -159,7 +114,7 @@ function BurgerConstructor() {
       </div>
 
       <Modal modalActive={modalVisible} closeModal={closeModal}>
-        <OrderDetails orderNumber={orderDataState.orderDetails.order.number} />
+        { orderRequest ? <Loader size="large" inverse={true} /> : <OrderDetails />}
       </Modal>
 
     </section>
