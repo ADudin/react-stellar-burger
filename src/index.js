@@ -13,8 +13,8 @@ import {
 
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import { ingridientsReducer } from "./services/reducers/ingridients";
-import { ingridientReducer } from "./services/reducers/ingridient";
+import { ingredientsReducer } from "./services/reducers/ingredients";
+import { ingredientReducer } from "./services/reducers/ingredient";
 import { burgerConstructorReducer } from "./services/reducers/burger-constructor";
 import { orderReducer } from "./services/reducers/order";
 
@@ -26,9 +26,9 @@ const composeEnhancers =
 const enhancer = composeEnhancers(applyMiddleware(thunk))
 
 const rootReducer = combineReducers({
-  ingridients: ingridientsReducer,
-  currentIngridient: ingridientReducer,
-  addedIngridients: burgerConstructorReducer,
+  ingredients: ingredientsReducer,
+  currentIngredient: ingredientReducer,
+  addedIngredients: burgerConstructorReducer,
   order: orderReducer
 });
 

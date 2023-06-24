@@ -1,4 +1,4 @@
-import styles from "./burger-ingridient.module.css";
+import styles from "./burger-ingredient.module.css";
 import propTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
 
@@ -16,14 +16,14 @@ import { v4 as uuidv4 } from "uuid";
 import { addItem, removeItem } from "../../services/actions/burger-constructor";
 import { useSelector, useDispatch } from "react-redux";
 
-function BurgerIngridient(props) {
+function BurgerIngredient(props) {
   const { item, openModal } = props;
   const [count, setCount] = useState(0);
 
   const dispatch = useDispatch();
-  const addedItems = useSelector(state => state.addedIngridients);
+  const addedItems = useSelector(state => state.addedIngredients);
 
-  const addIngridient = (item) => {
+  const addIngredient = (item) => {
     const addedItem = { ...item, key: uuidv4()}
 
     if (addedItem.type === 'bun' && addedItems.bun !== null) {
@@ -44,21 +44,21 @@ function BurgerIngridient(props) {
     }
     
     if (item.type !== 'bun') {
-      return setCount(addedItems.ingridients.filter(ingridient => ingridient._id === item._id).length);
+      return setCount(addedItems.ingredients.filter(ingredient => ingredient._id === item._id).length);
     };
   }, [addedItems, item._id, item.type]);
   
   return (
-    <li key={item._id} className={styles.ingridients__item} 
+    <li key={item._id} className={styles.ingredients__item} 
       onClick={
-        () => addIngridient(item)
+        () => addIngredient(item)
       }>
       <img src={item.image} alt={item.name} className="pr-4 pl-4"/>
-      <div className={`${styles.ingridients__price} mt-1`}>
+      <div className={`${styles.ingredients__price} mt-1`}>
         <p className="text text_type_digits-default">{item.price}</p>
         <CurrencyIcon type="primary" />
       </div>
-      <p className={`${styles.ingridients__paragraph} text text_type_main-default mt-1`}>{item.name}</p>
+      <p className={`${styles.ingredients__paragraph} text text_type_main-default mt-1`}>{item.name}</p>
       {
         count !== 0 && <Counter count={count} size="default" />
       }
@@ -66,9 +66,9 @@ function BurgerIngridient(props) {
   );
 }
 
-BurgerIngridient.propTypes = {
+BurgerIngredient.propTypes = {
   item: ingredientPropType.isRequired,
   openModal: propTypes.func.isRequired
 }
 
-export default BurgerIngridient;
+export default BurgerIngredient;

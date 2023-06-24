@@ -1,4 +1,4 @@
-.ingridients__item {
+.ingredients__item {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -6,22 +6,22 @@
   transition: all .2s linear;
 }
 
-.ingridients__item:hover {
+.ingredients__item:hover {
   opacity: .6;
 }
 
-.ingridients__item:active {
+.ingredients__item:active {
   opacity: .3;
 }
 
-.ingridients__price {
+.ingredients__price {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 9px;
 }
 
-.ingridients__paragraph {
+.ingredients__paragraph {
   min-height: 48px;
   text-align: center;
 }

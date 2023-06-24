@@ -1,8 +1,8 @@
-import styles from "./ingridient-details.module.css";
+import styles from "./ingredient-details.module.css";
 import { useSelector } from "react-redux";
 
-function IngridientDetails() {
-  const currentItem = useSelector(state => state.currentIngridient.currentItem);
+function IngredientDetails() {
+  const currentItem = useSelector(state => state.currentIngredient.currentItem);
 
   return (
     <>
@@ -33,4 +33,4 @@ function IngridientDetails() {
   )
 }
 
-export default IngridientDetails;
+export default IngredientDetails;

@@ -18,11 +18,11 @@ import { sendOrder } from "../../services/actions/order";
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
 
-  const addedItems = useSelector(state => state.addedIngridients);
+  const addedItems = useSelector(state => state.addedIngredients);
   const { orderRequest } = useSelector(state => state.order);
   const dispatch = useDispatch();
   const bun = addedItems.bun;
-  const fillingComponents = addedItems.ingridients;
+  const fillingComponents = addedItems.ingredients;
 
   const totalPrice = useMemo(() => {
     

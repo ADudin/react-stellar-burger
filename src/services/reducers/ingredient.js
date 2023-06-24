@@ -1,13 +1,13 @@
 import { 
   SHOW_ITEM,
   HIDE_ITEM
-} from "../actions/ingridient";
+} from "../actions/ingredient";
 
 const initialState = {
   currentItem: {}
 }
 
-export const ingridientReducer = (state = initialState, action) => {
+export const ingredientReducer = (state = initialState, action) => {
   switch (action.type) {
     case SHOW_ITEM: {
       return { ...state, currentItem: action.payload };

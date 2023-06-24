@@ -5,7 +5,7 @@ import {
 
 const initialState = {
   bun: null,
-  ingridients: []
+  ingredients: []
 }
 
 export const burgerConstructorReducer = (state = initialState, action) => {
@@ -20,7 +20,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
 
       return { 
         ...state, 
-        ingridients: [ ...state.ingridients, action.payload ]
+        ingredients: [ ...state.ingredients, action.payload ]
       };
     }
     case REMOVE_ITEM: {
@@ -33,7 +33,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        ingridients: state.ingridients.filter(item => item.key !== action.payload)
+        ingredients: state.ingredients.filter(item => item.key !== action.payload)
       };
     }
     default: {

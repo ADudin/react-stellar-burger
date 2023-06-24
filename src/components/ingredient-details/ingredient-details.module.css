@@ -26,7 +26,6 @@
 }
 
 .listItem {
-  /* color: #8585AD; */
   width: 120px;
   display: flex;
   flex-direction: column;

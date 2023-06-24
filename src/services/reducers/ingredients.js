@@ -2,7 +2,7 @@ import {
   GET_ITEMS_REQUEST,
   GET_ITEMS_SUCCESS,
   GET_ITEMS_FAILED
-} from "../actions/ingridients";
+} from "../actions/ingredients";
 
 const initialState = {
   items: [],
@@ -10,7 +10,7 @@ const initialState = {
   itemsFailed: false,
 };
 
-export const ingridientsReducer = (state = initialState, action) => {
+export const ingredientsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ITEMS_REQUEST: {
       return {
