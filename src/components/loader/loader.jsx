@@ -7,7 +7,7 @@ const loaderSizes = {
   large: 40
 };
 
-export const Loader = ({ size, inverse = false }) => {
+const Loader = ({ size, inverse = false }) => {
   const loaderColor = inverse ? '#fff' : '#3C39EC';
 
   const wrapperStyleKey = 'wrapper_' + size;
@@ -17,3 +17,5 @@ export const Loader = ({ size, inverse = false }) => {
     </div>
   );
 };
+
+export default Loader;

@@ -11,14 +11,16 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
+import Loader from "../loader/loader";
+import Error from "../error/error";
 import { useDispatch, useSelector } from "react-redux";
 import { getItems } from "../../services/actions/ingredients";
 import { showItem, hideItem } from "../../services/actions/ingredient";
-import { Loader } from "../loader/loader";
 import { useInView } from "react-intersection-observer";
+import { GET_ITEMS_FAILED_MESSAGE } from "../../services/actions/ingredients";
 
 function BurgerIngredients() {
-  const { items, itemsRequest } = useSelector(state => state.ingredients);
+  const { items, itemsRequest, itemsFailed } = useSelector(state => state.ingredients);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -93,7 +95,10 @@ function BurgerIngredients() {
       </div>
 
       {
-        itemsRequest ? <Loader size="large" inverse={true} /> :
+        itemsRequest ? 
+        <Loader size="large" inverse={true} /> :
+        itemsFailed ?
+        <Error errorMessage={GET_ITEMS_FAILED_MESSAGE} /> :
         <ul className={`${styles.ingredients__types} mt-10 custom-scroll`}>
 
           <li ref={refBuns}>

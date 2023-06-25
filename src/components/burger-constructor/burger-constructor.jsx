@@ -4,23 +4,25 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { 
   ConstructorElement,
-  DragIcon,
   CurrencyIcon,
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { Loader } from "../loader/loader";
+import BurgerConstructorIngredient from "../burger-constructor-ingredient/burger-constructor-ingredient";
+import Loader from "../loader/loader";
+import Error from "../error/error";
 import { addItem, removeItem } from "../../services/actions/burger-constructor";
 import { sendOrder } from "../../services/actions/order";
 import { useDrop } from "react-dnd";
+import { POST_ORDER_FAILED_MESSAGE } from "../../services/actions/order";
 
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const addedItems = useSelector(state => state.addedIngredients);
-  const { orderRequest } = useSelector(state => state.order);
+  const { orderRequest, orderFailed } = useSelector(state => state.order);
   const dispatch = useDispatch();
   const bun = addedItems.bun;
   const fillingComponents = addedItems.ingredients;
@@ -48,7 +50,7 @@ function BurgerConstructor() {
     }
 
     return fillingComponentsTotalPrice + bunPrice;
-  }, [addedItems]);
+  }, [bun, fillingComponents]);
 
   const openModal = () => {
     const orderData = fillingComponents.map(item => item._id);
@@ -83,19 +85,14 @@ function BurgerConstructor() {
 
         <ul className={`${styles.burgerConstructor__list} custom-scroll`}>
           {
-            fillingComponents.map(item => {
+            fillingComponents.map((item, index) => {
               return (
-                <li className={styles.burgerConstructor__item} key={item.key} >
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    text={item.name}
-                    price={item.price}
-                    thumbnail={item.image}
-                    handleClose={() => {
-                      dispatch(removeItem(item));
-                    }}
-                  />
-                </li>
+                <BurgerConstructorIngredient 
+                  key={item.key}
+                  item={item}
+                  index={index}
+                  removeItem={removeItem}
+                />
               )
             })
           }
@@ -125,7 +122,12 @@ function BurgerConstructor() {
       </div>
 
       <Modal modalActive={modalVisible} closeModal={closeModal}>
-        { orderRequest ? <Loader size="large" inverse={true} /> : <OrderDetails />}
+        { 
+          orderRequest ?
+          <Loader size="large" inverse={true} /> :
+          orderFailed ? <Error errorMessage={POST_ORDER_FAILED_MESSAGE} /> :
+          <OrderDetails />
+        }
       </Modal>
 
     </section>

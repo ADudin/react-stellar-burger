@@ -1,6 +1,7 @@
 import { 
   ADD_ITEM, 
-  REMOVE_ITEM 
+  REMOVE_ITEM,
+  MOVE_ITEM
 } from "../actions/burger-constructor";
 
 const initialState = {
@@ -35,6 +36,16 @@ export const burgerConstructorReducer = (state = initialState, action) => {
         ...state,
         ingredients: state.ingredients.filter(item => item.key !== action.payload)
       };
+    }
+    case MOVE_ITEM: {
+      const newItems = [...state.ingredients];
+      const dragItem = newItems[action.payload.dragIndex];
+      newItems.splice(action.payload.dragIndex, 1);
+      newItems.splice(action.payload.hoverIndex, 0, dragItem);
+      return {
+        ...state,
+        ingredients: newItems
+      }
     }
     default: {
       return state;
