@@ -13,26 +13,19 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { v4 as uuidv4 } from "uuid";
-import { addItem, removeItem } from "../../services/actions/burger-constructor";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useDrag } from "react-dnd";
 
 function BurgerIngredient(props) {
   const { item, openModal } = props;
   const [count, setCount] = useState(0);
-
-  const dispatch = useDispatch();
+  const addedItem = { ...item, key: uuidv4()}
   const addedItems = useSelector(state => state.addedIngredients);
 
-  const addIngredient = (item) => {
-    const addedItem = { ...item, key: uuidv4()}
-
-    if (addedItem.type === 'bun' && addedItems.bun !== null) {
-      dispatch(removeItem(addedItems.bun));
-    }
-    
-    dispatch(addItem(addedItem));
-    openModal(addedItem);
-  }
+  const [, dragRef] = useDrag({
+    type: 'ingredient',
+    item: addedItem
+  });
 
   useEffect(() => {
     if (item.type === 'bun' && addedItems.bun !== null && item._id === addedItems.bun._id) {
@@ -49,9 +42,9 @@ function BurgerIngredient(props) {
   }, [addedItems, item._id, item.type]);
   
   return (
-    <li key={item._id} className={styles.ingredients__item} 
+    <li ref={dragRef} key={item._id} className={styles.ingredients__item} 
       onClick={
-        () => addIngredient(item)
+        () => openModal(addedItem)
       }>
       <img src={item.image} alt={item.name} className="pr-4 pl-4"/>
       <div className={`${styles.ingredients__price} mt-1`}>

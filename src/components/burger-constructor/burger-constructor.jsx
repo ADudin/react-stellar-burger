@@ -12,8 +12,9 @@ import {
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { Loader } from "../loader/loader";
-import { removeItem } from "../../services/actions/burger-constructor";
+import { addItem, removeItem } from "../../services/actions/burger-constructor";
 import { sendOrder } from "../../services/actions/order";
+import { useDrop } from "react-dnd";
 
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,6 +24,16 @@ function BurgerConstructor() {
   const dispatch = useDispatch();
   const bun = addedItems.bun;
   const fillingComponents = addedItems.ingredients;
+
+  const [, dropTarget] = useDrop({
+    accept: 'ingredient',
+    drop(item) {
+      if (item.type === 'bun' && addedItems.bun !== null) {
+        dispatch(removeItem(addedItems.bun));
+      }
+      dispatch(addItem(item));
+    }
+  });
 
   const totalPrice = useMemo(() => {
     
@@ -57,7 +68,7 @@ function BurgerConstructor() {
   return (
     <section className={styles.burgerConstructor}>
 
-      <div className={`${styles.burgerConstructor__container} mt-25 pl-4`}>
+      <div ref={dropTarget} className={`${styles.burgerConstructor__container} mt-25 pl-4`}>
 
         {
           bun && <ConstructorElement
