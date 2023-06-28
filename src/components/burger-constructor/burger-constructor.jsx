@@ -53,10 +53,6 @@ function BurgerConstructor() {
   }, [bun, fillingComponents]);
 
   const openModal = () => {
-    if (bun === null) {
-      return;
-    }
-
     const orderData = fillingComponents.map(item => item._id);
     
     if (bun !== null) {
@@ -119,13 +115,15 @@ function BurgerConstructor() {
             <p className="text text_type_digits-medium">{totalPrice}</p>
             <CurrencyIcon type="primary" />
           </div>
-          <Button 
-            onClick={openModal} 
-            htmlType="button" 
-            type="primary" 
-            size="large">
+          {
+          bun === null || fillingComponents.length === 0 ?
+          <Button disabled htmlType="button" type="primary" size="large">
+            Оформить заказ
+          </Button> :
+          <Button onClick={openModal} htmlType="button" type="primary" size="large">
             Оформить заказ
           </Button>
+          }
         </div>
 
       </div>

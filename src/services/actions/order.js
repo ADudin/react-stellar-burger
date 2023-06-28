@@ -9,7 +9,6 @@ export function sendOrder(orderData) {
   return function(dispatch) {
     dispatch({ type: POST_ORDER_REQUEST });
     postOrder(orderData).then(res => {
-      console.log(res);
       if (res.success) {
         dispatch({
           type: POST_ORDER_SUCCESS,
