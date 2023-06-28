@@ -1,7 +1,8 @@
 import { 
   ADD_ITEM, 
   REMOVE_ITEM,
-  MOVE_ITEM
+  MOVE_ITEM,
+  RESET_ITEMS
 } from "../actions/burger-constructor";
 
 const initialState = {
@@ -45,7 +46,14 @@ export const burgerConstructorReducer = (state = initialState, action) => {
       return {
         ...state,
         ingredients: newItems
-      }
+      };
+    }
+    case RESET_ITEMS: {
+      return {
+        ...state,
+        bun: initialState.bun,
+        ingredients: initialState.ingredients
+      };
     }
     default: {
       return state;

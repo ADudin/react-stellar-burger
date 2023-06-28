@@ -13,7 +13,7 @@ import OrderDetails from "../order-details/order-details";
 import BurgerConstructorIngredient from "../burger-constructor-ingredient/burger-constructor-ingredient";
 import Loader from "../loader/loader";
 import Error from "../error/error";
-import { addItem, removeItem } from "../../services/actions/burger-constructor";
+import { addItem, removeItem, resetItems } from "../../services/actions/burger-constructor";
 import { sendOrder } from "../../services/actions/order";
 import { useDrop } from "react-dnd";
 import { POST_ORDER_FAILED_MESSAGE } from "../../services/actions/order";
@@ -53,6 +53,10 @@ function BurgerConstructor() {
   }, [bun, fillingComponents]);
 
   const openModal = () => {
+    if (bun === null) {
+      return;
+    }
+
     const orderData = fillingComponents.map(item => item._id);
     
     if (bun !== null) {
@@ -64,6 +68,7 @@ function BurgerConstructor() {
   }
 
   const closeModal = () => {
+    dispatch(resetItems());
     setModalVisible(false);
   }
 
@@ -114,7 +119,11 @@ function BurgerConstructor() {
             <p className="text text_type_digits-medium">{totalPrice}</p>
             <CurrencyIcon type="primary" />
           </div>
-          <Button onClick={openModal} htmlType="button" type="primary" size="large">
+          <Button 
+            onClick={openModal} 
+            htmlType="button" 
+            type="primary" 
+            size="large">
             Оформить заказ
           </Button>
         </div>

@@ -1,16 +1,26 @@
-const baseUrl = 'https://norma.nomoreparties.space/api/ingredients';
-const orderPostUrl = 'https://norma.nomoreparties.space/api/orders';
+const baseUrl = 'https://norma.nomoreparties.space/api';
+const ingredientsEndPoint = 'ingredients';
+const orderPostEndPoint = 'orders';
 
 const checkReponse = (res) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
+function request(endpoint, options) {
+  return fetch(`${baseUrl}/${endpoint}`, options).then(checkReponse);
+}
+
 export function getIngredients() {
-  return fetch(baseUrl).then(checkReponse);
+  return request(ingredientsEndPoint, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 };
 
 export function postOrder(orderData) {
-  return fetch(orderPostUrl, {
+  return request(orderPostEndPoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -18,5 +28,5 @@ export function postOrder(orderData) {
     body: JSON.stringify({
       ingredients: orderData
     })
-  }).then(checkReponse);
+  });
 };

@@ -68,7 +68,7 @@ function BurgerIngredients() {
     setModalVisible(true);
   };
 
-  const closeModal =() => {
+  const closeModal = () => {
     setModalVisible(false);
     // setTimeout for smooth popup closing,
     // otherwise content will disappear before popup will close

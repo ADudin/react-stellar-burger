@@ -35,6 +35,10 @@ function BurgerIngredient(props) {
     if (item.type === 'bun' && addedItems.bun !== null && item._id !== addedItems.bun._id) {
       setCount(0);
     }
+
+    if (item.type === 'bun' && addedItems.bun === null) {
+      setCount(0);
+    }
     
     if (item.type !== 'bun') {
       return setCount(addedItems.ingredients.filter(ingredient => ingredient._id === item._id).length);

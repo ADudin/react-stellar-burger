@@ -9,10 +9,18 @@ export function sendOrder(orderData) {
   return function(dispatch) {
     dispatch({ type: POST_ORDER_REQUEST });
     postOrder(orderData).then(res => {
-      dispatch({
-        type: POST_ORDER_SUCCESS,
-        payload: res.order.number
-      });
+      console.log(res);
+      if (res.success) {
+        dispatch({
+          type: POST_ORDER_SUCCESS,
+          payload: res.order.number
+        });
+      } else {
+        dispatch({
+          type: POST_ORDER_FAILED
+        });
+      }
+      
     }).catch(err => {
       dispatch({
         type: POST_ORDER_FAILED
