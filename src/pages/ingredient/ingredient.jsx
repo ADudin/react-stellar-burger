@@ -18,8 +18,8 @@ function Ingredient() {
 
   if (currentItem) {
     return (
-      <section className={`${styles.ingredient} pt-20`}>  
-        <h2 className={`${styles.title} text text_type_main-large mt-10`}>Детали ингридиента</h2>
+      <section className={styles.ingredient}>  
+        <h2 className={`${styles.title} text text_type_main-large`}>Детали ингридиента</h2>
         <div className={`${styles.container} pb-15`}>
           <img src={currentItem.image_large} className={styles.image} alt={currentItem.name}/>
           <p className={`${styles.description} text text_type_main-medium mt-4`}>{currentItem.name}</p>

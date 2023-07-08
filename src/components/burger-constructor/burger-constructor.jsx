@@ -6,7 +6,7 @@ import {
   ConstructorElement,
   CurrencyIcon,
   Button
-} from '@ya.praktikum/react-developer-burger-ui-components';
+} from "@ya.praktikum/react-developer-burger-ui-components";
 
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
