@@ -12,6 +12,7 @@ import {
 } from "redux";
 
 import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
 import thunk from "redux-thunk";
 import { ingredientsReducer } from "./services/reducers/ingredients";
 import { ingredientReducer } from "./services/reducers/ingredient";
@@ -36,9 +37,11 @@ const store = createStore(rootReducer, enhancer);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <Router>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

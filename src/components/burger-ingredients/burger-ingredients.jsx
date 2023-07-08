@@ -7,15 +7,11 @@ import {
 } from "react";
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
 import Loader from "../loader/loader";
 import Error from "../error/error";
 import { useDispatch, useSelector } from "react-redux";
 import { getItems } from "../../services/actions/ingredients";
-import { showItem, hideItem } from "../../services/actions/ingredient";
 import { useInView } from "react-intersection-observer";
 import { GET_ITEMS_FAILED_MESSAGE } from "../../services/actions/ingredients";
 
@@ -56,26 +52,10 @@ function BurgerIngredients() {
   const handleTabClick = (e) => {
     setCurrent(e);
   };
-
-  const [modalVisible, setModalVisible] = useState(false);
   
   const buns = items.filter(item => item.type === 'bun');
   const sauces = items.filter(item => item.type === 'sauce');
   const mains = items.filter(item => item.type === 'main');
-
-  const openModal = (element) => {
-    dispatch(showItem(element));
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-    // setTimeout for smooth popup closing,
-    // otherwise content will disappear before popup will close
-    setTimeout(() => {
-      dispatch(hideItem());
-    }, 450);
-  }
 
   return (
     <section className={styles.ingredients}>
@@ -104,30 +84,26 @@ function BurgerIngredients() {
           <li ref={refBuns}>
             <p className="text text_type_main-medium">Булки</p>
             <ul className={`${styles.ingredients__items} pt-6 pr-4 pl-4`}>
-              {buns.map(item => <BurgerIngredient key={item._id} item={item} openModal={() => openModal(item)} />)}
+              {buns.map(item => <BurgerIngredient key={item._id} item={item} />)}
             </ul>
           </li>
 
           <li ref={refSauces} className="mt-10">
             <p className="text text_type_main-medium">Соусы</p>
             <ul className={`${styles.ingredients__items} pt-6 pr-4 pl-4`}>
-              {sauces.map(item => <BurgerIngredient key={item._id} item={item} openModal={() => openModal(item)} />)}
+              {sauces.map(item => <BurgerIngredient key={item._id} item={item} />)}
             </ul>
           </li>
 
           <li ref={refMains} className="mt-10">
             <p className="text text_type_main-medium">Начинки</p>
             <ul className={`${styles.ingredients__items} pt-6 pr-4 pl-4`}>
-              {mains.map(item => <BurgerIngredient key={item._id} item={item} openModal={() => openModal(item)} />)}
+              {mains.map(item => <BurgerIngredient key={item._id} item={item} />)}
             </ul>
           </li>
 
         </ul>
       }
-
-      <Modal modalActive={modalVisible} closeModal={closeModal}>
-        <IngredientDetails />
-      </Modal>
 
     </section>
   );

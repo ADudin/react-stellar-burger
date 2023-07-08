@@ -128,14 +128,17 @@ function BurgerConstructor() {
 
       </div>
 
-      <Modal modalActive={modalVisible} closeModal={closeModal}>
-        { 
-          orderRequest ?
-          <Loader size="large" inverse={true} /> :
-          orderFailed ? <Error errorMessage={POST_ORDER_FAILED_MESSAGE} /> :
-          <OrderDetails />
-        }
-      </Modal>
+      {
+        modalVisible && 
+        <Modal closeModal={closeModal}>
+          { 
+            orderRequest ?
+            <Loader size="large" inverse={true} /> :
+            orderFailed ? <Error errorMessage={POST_ORDER_FAILED_MESSAGE} /> :
+            <OrderDetails />
+          }
+        </Modal>
+      }
 
     </section>
   );
