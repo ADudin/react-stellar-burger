@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 function IngredientDetails() {
-  // const currentItem = useSelector(state => state.currentIngredient.currentItem);
   const ingredients = useSelector(state => state.ingredients.items);
   const { ingredientId } = useParams();
   const currentItem = ingredients.find(item => item._id === ingredientId);

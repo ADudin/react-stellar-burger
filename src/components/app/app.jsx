@@ -8,6 +8,7 @@ import AppHeader from "../app-header/app-header";
 import Home from "../../pages/home/home";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import Ingredient from "../../pages/ingredient/ingredient";
 
 function App() {
   const location = useLocation();
@@ -24,12 +25,13 @@ function App() {
           <AppHeader />
           <Routes location={background || location}>
             <Route path="/" element={<Home />} />
+            <Route path='/ingredients/:ingredientId' element={<Ingredient />} />
           </Routes>
           {
             background && (
               <Routes>
                 <Route
-                  path={'/ingredients/:ingredientId'}
+                  path='/ingredients/:ingredientId'
                   element={
                     <Modal closeModal={handleModalClose}>
                       <IngredientDetails />
