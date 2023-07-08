@@ -1,10 +1,10 @@
 import styles from "./order-details.module.css";
 import orderConfirm from "../../images/orderConfirm.svg";
-import propTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-function OrderDetails(props) {
+function OrderDetails() {
 
-  const orderNumber = props.orderNumber;
+  const orderNumber = useSelector(state => state.order.orderId);
 
   return (
     <div className={`${styles.order__container} pt-30 pb-30`}>
@@ -15,10 +15,6 @@ function OrderDetails(props) {
       <p className="text text_type_main-default text_color_inactive mt-2">Дождитесь готовности на орбитальной станции</p>
     </div>
   );
-}
-
-OrderDetails.propTypes = {
-  orderNumber: propTypes.number.isRequired
 }
 
 export default OrderDetails;

@@ -1,12 +1,12 @@
-.ingridients {
+.ingredients {
   grid-column: 1/2;
 }
 
-.ingridients__tabs {
+.ingredients__tabs {
   display: flex;
 }
 
-.ingridients__types {
+.ingredients__types {
   height: 716px;
   list-style: none;
   margin-bottom: 0;
@@ -14,7 +14,7 @@
   overflow-y: scroll;
 }
 
-.ingridients__items {
+.ingredients__items {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(2, 1fr);

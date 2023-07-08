@@ -1,94 +1,77 @@
 import styles from "./burger-constructor.module.css";
-import { useState, useContext } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useState, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { 
   ConstructorElement,
-  DragIcon,
   CurrencyIcon,
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-
-import { 
-  BurgerIngridientsContext,
-  BunIngridientContext,
-  PriceContext
-} from "../../services/burger-constructor-context";
-
-const orderPostUrl = 'https://norma.nomoreparties.space/api/orders';
+import BurgerConstructorIngredient from "../burger-constructor-ingredient/burger-constructor-ingredient";
+import Loader from "../loader/loader";
+import Error from "../error/error";
+import { addItem, removeItem, resetItems } from "../../services/actions/burger-constructor";
+import { sendOrder } from "../../services/actions/order";
+import { useDrop } from "react-dnd";
+import { POST_ORDER_FAILED_MESSAGE } from "../../services/actions/order";
 
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
-  const { addedIngridients } = useContext(BurgerIngridientsContext);
-  const { addedBun } = useContext(BunIngridientContext);
-  const { totalPriceState } = useContext(PriceContext);
 
-  const [orderDataState, setOrderDataState] = useState({
-    isLoading: false,
-    hasError: false,
-    orderDetails: {
-      name: '',
-      order: {
-          number: 0
-      },
-      success: false
+  const addedItems = useSelector(state => state.addedIngredients);
+  const { orderRequest, orderFailed } = useSelector(state => state.order);
+  const dispatch = useDispatch();
+  const bun = addedItems.bun;
+  const fillingComponents = addedItems.ingredients;
+
+  const [, dropTarget] = useDrop({
+    accept: 'ingredient',
+    drop(item) {
+      if (item.type === 'bun' && addedItems.bun !== null) {
+        dispatch(removeItem(addedItems.bun));
+      }
+      dispatch(addItem(item));
     }
   });
 
-  const burgerComponents = addedIngridients;
-  const bun = addedBun;
-  const totalPrice = totalPriceState.count;
-
-  const fillingComponents = burgerComponents.filter(item => item.type !== 'bun');
-
-  const openModal = () => {
+  const totalPrice = useMemo(() => {
     
-    const postOrderData = () => {
+    const fillingComponentsTotalPrice = fillingComponents.reduce((acc, item) => {
+      return acc + item.price;
+    }, 0);
 
-      const orderData = burgerComponents.map(item => item._id);
-      if (bun !== 0) {
-        orderData.push(bun._id);
-      }
+    let bunPrice = 0;
 
-      setOrderDataState({ ...orderDataState, isLoading: true, hasError: false });
-      
-      fetch(orderPostUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ingredients: orderData
-        })
-      })
-      .then(res => {
-        if(res.ok) {
-          return res.json()
-        }
-        return Promise.reject(`Ошибка ${res.status}`);
-      })
-      .then(res => setOrderDataState({ ...orderDataState, orderDetails: res, isLoading: false }))
-      .catch(error => {
-        console.log(error);
-        setOrderDataState({ ...orderDataState, hasError: true, isLoading: false });
-      })
+    if (bun !== null) {
+      bunPrice = bun.price;
     }
 
-    postOrderData();
+    return fillingComponentsTotalPrice + bunPrice;
+  }, [bun, fillingComponents]);
+
+  const openModal = () => {
+    const orderData = fillingComponents.map(item => item._id);
+    
+    if (bun !== null) {
+      orderData.push(bun._id);
+    }
+
+    dispatch(sendOrder(orderData));
     setModalVisible(true);
   }
 
   const closeModal = () => {
+    dispatch(resetItems());
     setModalVisible(false);
   }
 
   return (
     <section className={styles.burgerConstructor}>
 
-      <div className={`${styles.burgerConstructor__container} mt-25 pl-4`}>
+      <div ref={dropTarget} className={`${styles.burgerConstructor__container} mt-25 pl-4`}>
 
         {
           bun && <ConstructorElement
@@ -103,16 +86,14 @@ function BurgerConstructor() {
 
         <ul className={`${styles.burgerConstructor__list} custom-scroll`}>
           {
-            fillingComponents.map(item => {
+            fillingComponents.map((item, index) => {
               return (
-                <li className={styles.burgerConstructor__item} key={uuidv4()}>
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    text={item.name}
-                    price={item.price}
-                    thumbnail={item.image}
-                  />
-                </li>
+                <BurgerConstructorIngredient 
+                  key={item.key}
+                  item={item}
+                  index={index}
+                  removeItem={removeItem}
+                />
               )
             })
           }
@@ -134,15 +115,26 @@ function BurgerConstructor() {
             <p className="text text_type_digits-medium">{totalPrice}</p>
             <CurrencyIcon type="primary" />
           </div>
+          {
+          bun === null || fillingComponents.length === 0 ?
+          <Button disabled htmlType="button" type="primary" size="large">
+            Оформить заказ
+          </Button> :
           <Button onClick={openModal} htmlType="button" type="primary" size="large">
             Оформить заказ
           </Button>
+          }
         </div>
 
       </div>
 
       <Modal modalActive={modalVisible} closeModal={closeModal}>
-        <OrderDetails orderNumber={orderDataState.orderDetails.order.number} />
+        { 
+          orderRequest ?
+          <Loader size="large" inverse={true} /> :
+          orderFailed ? <Error errorMessage={POST_ORDER_FAILED_MESSAGE} /> :
+          <OrderDetails />
+        }
       </Modal>
 
     </section>

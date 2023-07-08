@@ -9,6 +9,7 @@
 }
 
 .burgerConstructor__list {
+  min-height: 176px;
   max-height: 464px;
   overflow-y: scroll;
   list-style: none;
