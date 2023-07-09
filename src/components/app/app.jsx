@@ -13,6 +13,7 @@ import Login from "../../pages/login/login";
 import Register from "../../pages/register/register";
 import ErrorPage from "../../pages/error/error";
 import ForgotPassword from "../../pages/fogot-password/fogot-password";
+import ResetPassword from "../../pages/reset-password/reset-password";
 
 function App() {
   const location = useLocation();
@@ -33,6 +34,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/reset-password' element={<ResetPassword />} />
             <Route path='*' element={<ErrorPage />} />
           </Routes>
           {
