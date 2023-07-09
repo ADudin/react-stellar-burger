@@ -12,6 +12,7 @@ import Ingredient from "../../pages/ingredient/ingredient";
 import Login from "../../pages/login/login";
 import Register from "../../pages/register/register";
 import ErrorPage from "../../pages/error/error";
+import ForgotPassword from "../../pages/fogot-password/fogot-password";
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function App() {
             <Route path='/ingredients/:ingredientId' element={<Ingredient />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
             <Route path='*' element={<ErrorPage />} />
           </Routes>
           {
