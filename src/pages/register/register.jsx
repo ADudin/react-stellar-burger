@@ -1,5 +1,8 @@
 import styles from "./register.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   Input, 
   EmailInput,
@@ -7,7 +10,49 @@ import {
   Button
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import Loader from "../../components/loader/loader";
+import { registerUser } from "../../services/actions/user";
+
+
 function Register() {
+  const [form, setValue] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+
+  const { userRequest, authorized } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authorized) {
+      navigate('/');
+    }
+  }, [authorized, navigate]);
+
+  const onChange = evt => {
+    setValue({
+      ...form,
+      [evt.target.name]: evt.target.value
+    });
+  };
+
+  const register = useCallback(
+    evt => {
+      evt.preventDefault();
+      if (form.email !== '' && form.password !== '' && form.name !== '') {
+        dispatch(registerUser(form));
+      }
+    }, [dispatch, form]
+  );
+
+  if (userRequest) {
+    return (
+      <Loader size="large" inverse={true} /> 
+    );
+  }
+
   return (
     <section className={styles.container}>
 
@@ -18,8 +63,8 @@ function Register() {
           <Input
             type='text'
             placeholder='Имя'
-            onChange={() => {}}
-            value={''}
+            onChange={onChange}
+            value={form.name}
             name='name'
             error={false}
             errorText='Ошибка'
@@ -31,8 +76,8 @@ function Register() {
           <EmailInput
             type='email'
             placeholder='E-mail'
-            onChange={() => {}}
-            value={''}
+            onChange={onChange}
+            value={form.email}
             name='email'
             error={false}
             errorText='Ошибка'
@@ -44,9 +89,9 @@ function Register() {
           <PasswordInput
             type='password'
             placeholder='Пароль'
-            onChange={() => {}}
+            onChange={onChange}
             icon='ShowIcon'
-            value={''}
+            value={form.password}
             name='password'
             size='default'
             extraClass='mt-6'
@@ -58,6 +103,7 @@ function Register() {
           type='primary'
           extraClass='mt-6'
           size='medium'
+          onClick={register}
         >
           Зарегистрироваться
         </Button>

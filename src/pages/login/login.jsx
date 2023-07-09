@@ -1,12 +1,55 @@
 import styles from "./login.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { 
   EmailInput,
   PasswordInput,
   Button
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import Loader from "../../components/loader/loader";
+import { loginUser } from "../../services/actions/user";
+
 function Login() {
+  const [form, setValue] = useState({
+    email: '',
+    password: ''
+  });
+
+  const { userRequest, authorized } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authorized) {
+      navigate('/');
+    }
+  }, [authorized, navigate]);
+
+  const onChange = evt => {
+    setValue({
+      ...form,
+      [evt.target.name]: evt.target.value
+    });
+  }
+
+  const login = useCallback(
+    evt => {
+      evt.preventDefault();
+      if (form.email !== '' && form.password !== '') {
+        dispatch(loginUser(form));
+      }
+    }, [dispatch, form]
+  );
+
+  if (userRequest) {
+    return (
+      <Loader size="large" inverse={true} />
+    );
+  }
+
   return (
     <section className={styles.login}>
 
@@ -17,8 +60,8 @@ function Login() {
           <EmailInput
             type='email'
             placeholder='E-mail'
-            onChange={() => {}}
-            value={''}
+            onChange={onChange}
+            value={form.email}
             name='email'
             error={false}
             errorText='Ошибка'
@@ -30,9 +73,9 @@ function Login() {
           <PasswordInput
             type='password'
             placeholder='Пароль'
-            onChange={() => {}}
+            onChange={onChange}
             icon='ShowIcon'
-            value={''}
+            value={form.password}
             name='password'
             size='default'
             extraClass='mt-6'
@@ -44,6 +87,7 @@ function Login() {
           type='primary'
           extraClass='mt-6'
           size='medium'
+          onClick={login}
         >
           Войти
         </Button>
