@@ -10,6 +10,7 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Ingredient from "../../pages/ingredient/ingredient";
 import Login from "../../pages/login/login";
+import Register from "../../pages/register/register";
 import ErrorPage from "../../pages/error/error";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/ingredients/:ingredientId' element={<Ingredient />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
             <Route path='*' element={<ErrorPage />} />
           </Routes>
           {
