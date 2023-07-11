@@ -1,12 +1,14 @@
 import { 
   postUserRegistration,
-  postUserLogin 
+  postUserLogin,
+  postUserForgotPassword
 } from "../../utils/api";
 
 export const POST_USER_REQUEST = 'POST_USER_REQUEST';
 export const POST_USER_REGISTRATION_SUCCESS = 'POST_USER_REGISTRATION_SUCCESS';
 export const POST_USER_REQUEST_FAILED = 'POST_USER_REQUEST_FAILED';
 export const POST_USER_LOGIN_SUCCESS = 'POST_USER_LOGIN_SUCCESS';
+export const POST_USER_RESET_PASSWORD_SUCCESS = 'POST_USER_RESET_PASSWORD_SUCCESS';
 //export const POST_USER_REGISTRATION_FAILED_MESSAGE = 'Ошибка отправки данных для регистрации пользователя';
 
 export function registerUser(data) {
@@ -55,4 +57,25 @@ export function loginUser(data) {
       });
     });
   };
+};
+
+export function forgotUserPassword(data) {
+  return function(dispatch) {
+    dispatch({ type: POST_USER_REQUEST });
+    postUserForgotPassword(data).then(res => {
+      if (res.success) {
+        dispatch({
+          type: POST_USER_RESET_PASSWORD_SUCCESS
+        });
+      } else {
+        dispatch({
+          type: POST_USER_REQUEST_FAILED
+        });
+      }
+    }).catch(err => {
+      dispatch({
+        type: POST_USER_REQUEST_FAILED
+      });
+    });
+  }
 };

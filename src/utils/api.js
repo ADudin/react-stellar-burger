@@ -3,6 +3,7 @@ const ingredientsEndPoint = 'ingredients';
 const orderPostEndPoint = 'orders';
 const userRegistartionEndPoint = 'auth/register';
 const userLoginEndPoint = 'auth/login';
+const forgotPasswordEndPoint = 'password-reset';
 
 const checkReponse = (res) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
@@ -56,6 +57,18 @@ export function postUserLogin(data) {
     body: JSON.stringify({
       email: data.email,
       password: data.password
+    })
+  });
+};
+
+export function postUserForgotPassword(data) {
+  return request(forgotPasswordEndPoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: data.email
     })
   });
 };

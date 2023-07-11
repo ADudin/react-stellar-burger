@@ -1,11 +1,57 @@
 import styles from "./fogot-password.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useCallback, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { 
   EmailInput, 
   Button 
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import Loader from "../../components/loader/loader";
+import { forgotUserPassword } from "../../services/actions/user";
+//import { postUserForgotPassword } from "../../utils/api";
+
 function ForgotPassword() {
+  const [form, setValue] = useState({
+    email: ''
+  });
+
+  const { userRequest, changePasswordRequestSent, authorized } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authorized) {
+      navigate('/');
+    }
+    if (changePasswordRequestSent) {
+      navigate('/reset-password');
+    }
+  }, [authorized, navigate, changePasswordRequestSent]);
+
+  const onChange = evt => {
+    setValue ({
+      ...form,
+      [evt.target.name]: evt.target.value
+    });
+  };
+
+  const launchPasswordChanging = useCallback(
+    evt => {
+      evt.preventDefault();
+      if (form.email !== '') {
+        dispatch(forgotUserPassword(form));
+      }
+    }, [dispatch, form]
+  );
+
+  if (userRequest) {
+    return (
+      <Loader size="large" inverse={true} /> 
+    );
+  }
+
   return (
     <section className={styles.container}>
 
@@ -16,8 +62,8 @@ function ForgotPassword() {
           <EmailInput
             type='email'
             placeholder='E-mail'
-            onChange={() => {}}
-            value={''}
+            onChange={onChange}
+            value={form.email}
             name='email'
             error={false}
             errorText='Ошибка'
@@ -31,6 +77,7 @@ function ForgotPassword() {
           type='primary'
           extraClass='mt-6'
           size='medium'
+          onClick={launchPasswordChanging}
         >
           Восстановить
         </Button>
