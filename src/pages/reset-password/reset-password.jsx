@@ -1,12 +1,55 @@
 import styles from "./reset-password.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useCallback, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import {
   Input,
   PasswordInput,
   Button
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import Loader from "../../components/loader/loader";
+import { resetUserPassword } from "../../services/actions/user";
+
 function ResetPassword() {
+  const [form, setValue] = useState({
+    password: '',
+    token: ''
+  });
+
+  const { userRequest, changePasswordRequestSent, authorized } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authorized || !changePasswordRequestSent) {
+      navigate('/');
+    }
+  }, [authorized, navigate, changePasswordRequestSent]);
+
+  const onChange = evt => {
+    setValue({
+      ...form,
+      [evt.target.name]: evt.target.value
+    });
+  };
+
+  const resetPassword = useCallback(
+    evt => {
+      evt.preventDefault();
+      if (form.password !== '' || form.token !== '') {
+        dispatch(resetUserPassword(form));
+      }
+    }, [dispatch, form]
+  );
+
+  if (userRequest) {
+    return (
+      <Loader size="large" inverse={true} /> 
+    );
+  }
+
   return (
     <section className={styles.container}>
 
@@ -17,9 +60,9 @@ function ResetPassword() {
           <PasswordInput
             type='password'
             placeholder='Введите новый пароль'
-            onChange={() => {}}
+            onChange={onChange}
             icon='ShowIcon'
-            value={''}
+            value={form.password}
             name='password'
             size='default'
             extraClass='mt-6'
@@ -29,9 +72,9 @@ function ResetPassword() {
           <Input
             type='text'
             placeholder='Введите код из письма'
-            onChange={() => {}}
-            value={''}
-            name='code'
+            onChange={onChange}
+            value={form.token}
+            name='token'
             error={false}
             errorText='Ошибка'
             size='default'
@@ -44,6 +87,7 @@ function ResetPassword() {
           type='primary'
           extraClass='mt-6'
           size='medium'
+          onClick={resetPassword}
         >
           Сохранить
         </Button>

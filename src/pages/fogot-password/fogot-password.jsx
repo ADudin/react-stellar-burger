@@ -10,7 +10,6 @@ import {
 
 import Loader from "../../components/loader/loader";
 import { forgotUserPassword } from "../../services/actions/user";
-//import { postUserForgotPassword } from "../../utils/api";
 
 function ForgotPassword() {
   const [form, setValue] = useState({

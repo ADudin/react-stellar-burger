@@ -4,6 +4,7 @@ const orderPostEndPoint = 'orders';
 const userRegistartionEndPoint = 'auth/register';
 const userLoginEndPoint = 'auth/login';
 const forgotPasswordEndPoint = 'password-reset';
+const resetPasswordEndPoint = 'password-reset/reset';
 
 const checkReponse = (res) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
@@ -69,6 +70,19 @@ export function postUserForgotPassword(data) {
     },
     body: JSON.stringify({
       email: data.email
+    })
+  });
+};
+
+export function postUserResetPassword(data) {
+  return request(resetPasswordEndPoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      password: data.password,
+      token: data.token
     })
   });
 };
