@@ -12,11 +12,13 @@ import {
 } from "redux";
 
 import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
 import thunk from "redux-thunk";
 import { ingredientsReducer } from "./services/reducers/ingredients";
 import { ingredientReducer } from "./services/reducers/ingredient";
 import { burgerConstructorReducer } from "./services/reducers/burger-constructor";
 import { orderReducer } from "./services/reducers/order";
+import { userReducer } from "./services/reducers/user";
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -29,16 +31,19 @@ const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   currentIngredient: ingredientReducer,
   addedIngredients: burgerConstructorReducer,
-  order: orderReducer
+  order: orderReducer,
+  user: userReducer
 });
 
 const store = createStore(rootReducer, enhancer);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <Router>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

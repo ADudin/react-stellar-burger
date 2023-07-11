@@ -9,12 +9,12 @@ import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 const modalRoot = document.getElementById('modal-root');
 
 function Modal(props) {
-  const { modalActive, closeModal } = props;
+  const { closeModal } = props;
 
   useEffect(() => {
 
     const handleEscClose = (evt) => {
-      if (modalActive && evt.key === 'Escape') {
+      if (evt.key === 'Escape') {
         closeModal();
       }
     }
@@ -24,11 +24,10 @@ function Modal(props) {
     return () => {
       document.removeEventListener('keydown', handleEscClose);
     }
-
-  }, [modalActive, closeModal]);
+  }, [closeModal]);
 
   const handleOverlayClickClose = (evt) => {
-    if (modalActive && evt.target.dataset.element === 'overlay') {
+    if (evt.target.dataset.element === 'overlay') {
       closeModal();
     }
   }
@@ -36,8 +35,8 @@ function Modal(props) {
   return ReactDOM.createPortal(
     (
       <>
-        <ModalOverlay modalActive={modalActive} />
-        <section onClick={handleOverlayClickClose} data-element="overlay" className={modalActive ? `${styles.modal} ${styles.modal__active}` : styles.modal}>
+        <ModalOverlay />
+        <section onClick={handleOverlayClickClose} data-element="overlay" className={`${styles.modal} ${styles.modal__active}`}>  
           <div className={styles.modal__container}>
             {props.children}
             <button onClick={closeModal} className={styles.modal__close} type="button">
@@ -52,7 +51,6 @@ function Modal(props) {
 };
 
 Modal.propTypes = {
-  modalActive: propTypes.bool.isRequired,
   closeModal: propTypes.func.isRequired,
   children: propTypes.element.isRequired
 }

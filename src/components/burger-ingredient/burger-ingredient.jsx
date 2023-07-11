@@ -1,5 +1,4 @@
 import styles from "./burger-ingredient.module.css";
-import propTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
 
 import { 
@@ -15,9 +14,10 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
+import { Link, useLocation } from "react-router-dom";
 
 function BurgerIngredient(props) {
-  const { item, openModal } = props;
+  const { item } = props;
   const [count, setCount] = useState(0);
   const addedItem = { ...item, key: uuidv4()}
   const addedItems = useSelector(state => state.addedIngredients);
@@ -26,6 +26,9 @@ function BurgerIngredient(props) {
     type: 'ingredient',
     item: addedItem
   });
+
+  const location = useLocation();
+  const ingredientId = item['_id'];
 
   useEffect(() => {
     if (item.type === 'bun' && addedItems.bun !== null && item._id === addedItems.bun._id) {
@@ -46,26 +49,32 @@ function BurgerIngredient(props) {
   }, [addedItems, item._id, item.type]);
   
   return (
-    <li ref={dragRef} key={item._id} className={styles.ingredients__item} 
-      onClick={
-        () => openModal(addedItem)
-      }>
-      <img src={item.image} alt={item.name} className="pr-4 pl-4"/>
-      <div className={`${styles.ingredients__price} mt-1`}>
-        <p className="text text_type_digits-default">{item.price}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-      <p className={`${styles.ingredients__paragraph} text text_type_main-default mt-1`}>{item.name}</p>
-      {
-        count !== 0 && <Counter count={count} size="default" />
-      }
+    <li ref={dragRef} key={item._id}>
+      <Link
+        key={ingredientId}
+        // Тут мы формируем динамический путь для нашего ингредиента
+        to={`/ingredients/${ingredientId}`}
+        // а также сохраняем в свойство background роут,
+        // на котором была открыта наша модалка
+        state={{ background: location }}
+        className={styles.ingredients__item}
+      >
+        <img src={item.image} alt={item.name} className="pr-4 pl-4"/>
+        <div className={`${styles.ingredients__price} mt-1`}>
+          <p className="text text_type_digits-default">{item.price}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <p className={`${styles.ingredients__paragraph} text text_type_main-default mt-1`}>{item.name}</p>
+        {
+          count !== 0 && <Counter count={count} size="default" />
+        }
+      </Link>
     </li>
   );
 }
 
 BurgerIngredient.propTypes = {
-  item: ingredientPropType.isRequired,
-  openModal: propTypes.func.isRequired
+  item: ingredientPropType.isRequired
 }
 
 export default BurgerIngredient;

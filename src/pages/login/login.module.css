@@ -1,0 +1,26 @@
+.login{
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  color: #4c4cff;
+  transition: all .2s linear;
+}
+
+.link:hover {
+  opacity: .6;
+}
+
+.link:active {
+  opacity: .3;
+}

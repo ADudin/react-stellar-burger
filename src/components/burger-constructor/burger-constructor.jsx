@@ -6,7 +6,7 @@ import {
   ConstructorElement,
   CurrencyIcon,
   Button
-} from '@ya.praktikum/react-developer-burger-ui-components';
+} from "@ya.praktikum/react-developer-burger-ui-components";
 
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
@@ -128,14 +128,17 @@ function BurgerConstructor() {
 
       </div>
 
-      <Modal modalActive={modalVisible} closeModal={closeModal}>
-        { 
-          orderRequest ?
-          <Loader size="large" inverse={true} /> :
-          orderFailed ? <Error errorMessage={POST_ORDER_FAILED_MESSAGE} /> :
-          <OrderDetails />
-        }
-      </Modal>
+      {
+        modalVisible && 
+        <Modal closeModal={closeModal}>
+          { 
+            orderRequest ?
+            <Loader size="large" inverse={true} /> :
+            orderFailed ? <Error errorMessage={POST_ORDER_FAILED_MESSAGE} /> :
+            <OrderDetails />
+          }
+        </Modal>
+      }
 
     </section>
   );
