@@ -1,6 +1,6 @@
 import styles from "./register.module.css";
-import { Link, useNavigate } from "react-router-dom";
-import { useState, useCallback, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -22,15 +22,8 @@ function Register() {
     password: ''
   });
 
-  const { userRequest, authorized } = useSelector(state => state.user);
+  const { userRequest } = useSelector(state => state.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (authorized) {
-      navigate(ROUTES.main);
-    }
-  }, [authorized, navigate]);
 
   const onChange = evt => {
     setValue({

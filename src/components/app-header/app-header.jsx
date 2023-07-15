@@ -1,5 +1,6 @@
 import styles from "./app-header.module.css";
 import { NavLink, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { 
   BurgerIcon,
@@ -10,8 +11,18 @@ import {
 
 import { ROUTES } from "../../utils/data";
 
+
 function AppHeader() {
   const location = useLocation();
+  const isUserAuthorized = useSelector(state => state.user.authorized);
+
+  const checkUserAuthorized = () => {
+    if (isUserAuthorized) {
+      return ROUTES.profile;
+    }
+
+    return ROUTES.login;
+  };
 
   return (
     <header className={styles.header}>
@@ -41,7 +52,7 @@ function AppHeader() {
 
         <Logo />
 
-        <NavLink to={ROUTES.profile} className={
+        <NavLink to={checkUserAuthorized()} className={
           ({ isActive }) => isActive ?
           `${styles.header__link} pl-5 pr-5` :
           `${styles.header__link} pl-5 pr-5 text_color_inactive`

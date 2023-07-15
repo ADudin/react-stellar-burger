@@ -43,7 +43,7 @@ function ResetPassword() {
         dispatch(resetUserPassword(form));
         navigate(ROUTES.login);
       }
-    }, [dispatch, form]
+    }, [dispatch, form, navigate]
   );
 
   if (userRequest) {

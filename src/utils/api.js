@@ -3,6 +3,9 @@ const ingredientsEndPoint = 'ingredients';
 const orderPostEndPoint = 'orders';
 const userRegistartionEndPoint = 'auth/register';
 const userLoginEndPoint = 'auth/login';
+const userLogoutEndPoint = 'auth/logout';
+const refreshUserTokenEndPoint = 'auth/token';
+const getUserEndPoint = 'auth/user';
 const forgotPasswordEndPoint = 'password-reset';
 const resetPasswordEndPoint = 'password-reset/reset';
 
@@ -62,6 +65,18 @@ export function postUserLogin(data) {
   });
 };
 
+export function postUserLogout(data) {
+  return request(userLogoutEndPoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      token: data
+    })
+  });
+};
+
 export function postUserForgotPassword(data) {
   return request(forgotPasswordEndPoint, {
     method: 'POST',
@@ -84,5 +99,46 @@ export function postUserResetPassword(data) {
       password: data.password,
       token: data.token
     })
+  });
+};
+
+export const refreshToken = () => {
+  return request(refreshUserTokenEndPoint, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      token: localStorage.getItem("refreshToken"),
+    })
+  });
+};
+
+export const fetchWithRefresh = async (endpoint, options) => {
+  try {
+    return await request(endpoint, options);
+  } catch (err) {
+    if (err.message === 'jwt expired') {
+      const refreshData = await refreshToken(); //обновляем токен
+      if (!refreshData.success) {
+        return Promise.reject(refreshData);
+      }
+      localStorage.setItem('refreshToken', refreshData.refreshToken);
+      localStorage.setItem('accessToken', refreshData.accessToken);
+      options.headers.authorization = refreshData.accessToken;
+      return await request(endpoint, options); // повторяем запрос
+    } else {
+      return Promise.reject(err);
+    }
+  }
+};
+
+export function getUser() {
+  return fetchWithRefresh(getUserEndPoint, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: localStorage.getItem('accessToken')
+    },
   });
 };

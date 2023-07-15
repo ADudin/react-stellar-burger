@@ -17,18 +17,15 @@ function ForgotPassword() {
     email: ''
   });
 
-  const { userRequest, changePasswordRequestSent, authorized } = useSelector(state => state.user);
+  const { userRequest, changePasswordRequestSent } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (authorized) {
-      navigate(ROUTES.main);
-    }
     if (changePasswordRequestSent) {
       navigate(ROUTES.resetPassword);
     }
-  }, [authorized, navigate, changePasswordRequestSent]);
+  }, [navigate, changePasswordRequestSent]);
 
   const onChange = evt => {
     setValue ({

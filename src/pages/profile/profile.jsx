@@ -1,6 +1,6 @@
 import styles from "./profile.module.css";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 import { 
@@ -9,9 +9,11 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { ROUTES } from "../../utils/data";
+import { logoutUser } from "../../services/actions/user";
 
 function Profile() {
   const { name, email } = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
   const [form, setValue] = useState({
     name: name,
@@ -32,6 +34,11 @@ function Profile() {
       email: email,
       password: ''
     });
+  };
+
+  const onLogout = () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    dispatch(logoutUser(refreshToken));
   };
 
   return (
@@ -59,7 +66,11 @@ function Profile() {
             </li>
 
             <li>
-              <NavLink  className={`${styles.link} text_color_inactive`}>
+              <NavLink
+               to={ROUTES.main} 
+               onClick={onLogout}
+               className={`${styles.link} text_color_inactive`}
+              >
                 <p className="text text_type_main-medium">Выход</p>
               </NavLink>
             </li>

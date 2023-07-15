@@ -3,8 +3,10 @@ import {
   POST_USER_REGISTRATION_SUCCESS,
   POST_USER_REQUEST_FAILED,
   POST_USER_LOGIN_SUCCESS,
+  POST_USER_LOGOUT_SUCCESS,
   POST_USER_FOGOT_PASSWORD_SUCCESS,
-  POST_USER_RESET_PASSWORD_SUCCESS
+  POST_USER_RESET_PASSWORD_SUCCESS,
+  GET_USER_SUCCESS
 } from "../actions/user";
 
 const initialState = {
@@ -41,6 +43,16 @@ export const userReducer = (state = initialState, action) => {
         authorized: true
       };
     }
+    case POST_USER_LOGOUT_SUCCESS: {
+      return {
+        ...state,
+        userRequest: false,
+        userRequestFailed: false,
+        name: initialState.name,
+        email: initialState.email,
+        authorized: false
+      };
+    }
     case POST_USER_FOGOT_PASSWORD_SUCCESS: {
       return {
         ...state,
@@ -65,6 +77,16 @@ export const userReducer = (state = initialState, action) => {
         name: initialState.name,
         email: initialState.email,
         authorized: false
+      };
+    }
+    case GET_USER_SUCCESS: {
+      return {
+        ...state,
+        userRequest: false,
+        userRequestFailed: false,
+        name: action.payload.user.name,
+        email: action.payload.user.email,
+        authorized: true
       };
     }
     default: {

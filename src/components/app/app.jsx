@@ -3,6 +3,8 @@ import styles from "./app.module.css";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import AppHeader from "../app-header/app-header";
 import Home from "../../pages/home/home";
@@ -15,16 +17,24 @@ import ErrorPage from "../../pages/error/error";
 import ForgotPassword from "../../pages/fogot-password/fogot-password";
 import ResetPassword from "../../pages/reset-password/reset-password";
 import Profile from "../../pages/profile/profile";
+
 import { ROUTES } from "../../utils/data";
+import { checkUserAuth } from "../../services/actions/user";
+import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const background = location.state && location.state.background;
 
   const handleModalClose = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    dispatch(checkUserAuth());
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>
@@ -33,11 +43,11 @@ function App() {
           <Routes location={background || location}>
             <Route path={ROUTES.main} element={<Home />} />
             <Route path={ROUTES.ingredient} element={<Ingredient />} />
-            <Route path={ROUTES.login} element={<Login />} />
-            <Route path={ROUTES.register} element={<Register />} />
-            <Route path={ROUTES.forgotPassword} element={<ForgotPassword />} />
+            <Route path={ROUTES.login} element={<OnlyUnAuth component={<Login />} />} />
+            <Route path={ROUTES.register} element={<OnlyUnAuth component={<Register />} />} />
+            <Route path={ROUTES.forgotPassword} element={<OnlyUnAuth component={<ForgotPassword />} />} />
             <Route path={ROUTES.resetPassword} element={<ResetPassword />} />
-            <Route path={ROUTES.profile} element={<Profile />} />
+            <Route path={ROUTES.profile} element={<OnlyAuth component={<Profile />} />} />
             <Route path={ROUTES.error} element={<ErrorPage />} />
           </Routes>
           {
