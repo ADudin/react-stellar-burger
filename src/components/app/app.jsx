@@ -14,6 +14,8 @@ import Register from "../../pages/register/register";
 import ErrorPage from "../../pages/error/error";
 import ForgotPassword from "../../pages/fogot-password/fogot-password";
 import ResetPassword from "../../pages/reset-password/reset-password";
+import Profile from "../../pages/profile/profile";
+import { ROUTES } from "../../utils/data";
 
 function App() {
   const location = useLocation();
@@ -29,19 +31,20 @@ function App() {
         <DndProvider backend={HTML5Backend}>
           <AppHeader />
           <Routes location={background || location}>
-            <Route path='/' element={<Home />} />
-            <Route path='/ingredients/:ingredientId' element={<Ingredient />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='/reset-password' element={<ResetPassword />} />
-            <Route path='*' element={<ErrorPage />} />
+            <Route path={ROUTES.main} element={<Home />} />
+            <Route path={ROUTES.ingredient} element={<Ingredient />} />
+            <Route path={ROUTES.login} element={<Login />} />
+            <Route path={ROUTES.register} element={<Register />} />
+            <Route path={ROUTES.forgotPassword} element={<ForgotPassword />} />
+            <Route path={ROUTES.resetPassword} element={<ResetPassword />} />
+            <Route path={ROUTES.profile} element={<Profile />} />
+            <Route path={ROUTES.error} element={<ErrorPage />} />
           </Routes>
           {
             background && (
               <Routes>
                 <Route
-                  path='/ingredients/:ingredientId'
+                  path={ROUTES.ingredient}
                   element={
                     <Modal closeModal={handleModalClose}>
                       <IngredientDetails />

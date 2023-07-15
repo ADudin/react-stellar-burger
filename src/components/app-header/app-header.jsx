@@ -1,4 +1,5 @@
 import styles from "./app-header.module.css";
+import { NavLink, useLocation } from "react-router-dom";
 
 import { 
   BurgerIcon,
@@ -7,17 +8,29 @@ import {
   ProfileIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { ROUTES } from "../../utils/data";
+
 function AppHeader() {
+  const location = useLocation();
+
   return (
     <header className={styles.header}>
       <div className={styles.header__container}>
 
         <nav className={styles.header__navigation}>
 
-          <a href="/" className={`${styles.header__link} pl-5 pr-5`}>
-            <BurgerIcon type="primary" />
+          <NavLink to={ROUTES.main} className={
+            ({ isActive }) => isActive ?
+            `${styles.header__link} pl-5 pr-5` :
+            `${styles.header__link} pl-5 pr-5 text_color_inactive`
+          }>
+            {
+              location.pathname === ROUTES.main ?
+              <BurgerIcon type="primary" /> :
+              <BurgerIcon type="secondary" />
+            }
             <p className="ml-2 text text_type_main-default">Конструктор</p>
-          </a>
+          </NavLink>
 
           <a href="/" className={`${styles.header__link} ${styles.header__link_disabled} ml-2 pl-5 pr-5`}>
             <ListIcon type="secondary" />
@@ -28,10 +41,18 @@ function AppHeader() {
 
         <Logo />
 
-        <a href="/" className={`${styles.header__link} ${styles.header__link_disabled} pl-5 pr-5`}>
-          <ProfileIcon type="secondary" />
-          <p className="ml-2 text text_type_main-default text_color_inactive">Личный кабинет</p>
-        </a>
+        <NavLink to={ROUTES.profile} className={
+          ({ isActive }) => isActive ?
+          `${styles.header__link} pl-5 pr-5` :
+          `${styles.header__link} pl-5 pr-5 text_color_inactive`
+        }>
+          {
+            location.pathname === ROUTES.profile ?
+            <ProfileIcon type="primary" /> :
+            <ProfileIcon type="secondary" />
+          }
+          <p className="ml-2 text text_type_main-default">Личный кабинет</p>
+        </NavLink>
 
       </div>
     </header>

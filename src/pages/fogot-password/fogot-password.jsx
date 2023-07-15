@@ -10,6 +10,7 @@ import {
 
 import Loader from "../../components/loader/loader";
 import { forgotUserPassword } from "../../services/actions/user";
+import { ROUTES } from "../../utils/data";
 
 function ForgotPassword() {
   const [form, setValue] = useState({
@@ -22,10 +23,10 @@ function ForgotPassword() {
 
   useEffect(() => {
     if (authorized) {
-      navigate('/');
+      navigate(ROUTES.main);
     }
     if (changePasswordRequestSent) {
-      navigate('/reset-password');
+      navigate(ROUTES.resetPassword);
     }
   }, [authorized, navigate, changePasswordRequestSent]);
 
@@ -83,7 +84,7 @@ function ForgotPassword() {
       </form>
 
       <p className="text text_type_main-default text_color_inactive">
-        Вспомнили пароль? <Link to='/login' className={styles.link}>Войти</Link>
+        Вспомнили пароль? <Link to={ROUTES.login} className={styles.link}>Войти</Link>
       </p>
 
     </section>

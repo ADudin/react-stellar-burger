@@ -11,6 +11,7 @@ import {
 
 import Loader from "../../components/loader/loader";
 import { loginUser } from "../../services/actions/user";
+import { ROUTES } from "../../utils/data";
 
 function Login() {
   const [form, setValue] = useState({
@@ -24,7 +25,7 @@ function Login() {
 
   useEffect(() => {
     if (authorized) {
-      navigate('/');
+      navigate(ROUTES.main);
     }
   }, [authorized, navigate]);
 
@@ -94,11 +95,11 @@ function Login() {
       </form>
 
       <p className="text text_type_main-default text_color_inactive">
-        Вы - новый пользователь? <Link to='/register' className={styles.link}>Зарегистрироваться</Link>
+        Вы - новый пользователь? <Link to={ROUTES.register} className={styles.link}>Зарегистрироваться</Link>
       </p>
 
       <p className="text text_type_main-default text_color_inactive mt-4">
-        Забыли пароль? <Link to='/forgot-password' className={styles.link}>Восстановить пароль</Link>
+        Забыли пароль? <Link to={ROUTES.forgotPassword} className={styles.link}>Восстановить пароль</Link>
       </p>
 
     </section>

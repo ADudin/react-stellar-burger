@@ -12,6 +12,7 @@ import {
 
 import Loader from "../../components/loader/loader";
 import { registerUser } from "../../services/actions/user";
+import { ROUTES } from "../../utils/data";
 
 
 function Register() {
@@ -27,7 +28,7 @@ function Register() {
 
   useEffect(() => {
     if (authorized) {
-      navigate('/');
+      navigate(ROUTES.main);
     }
   }, [authorized, navigate]);
 
@@ -110,7 +111,7 @@ function Register() {
       </form>
 
       <p className="text text_type_main-default text_color_inactive">
-        Уже зарегистрированы? <Link to='/login' className={styles.link}>Войти</Link>
+        Уже зарегистрированы? <Link to={ROUTES.login} className={styles.link}>Войти</Link>
       </p>
 
     </section>

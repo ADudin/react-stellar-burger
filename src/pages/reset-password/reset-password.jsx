@@ -11,6 +11,7 @@ import {
 
 import Loader from "../../components/loader/loader";
 import { resetUserPassword } from "../../services/actions/user";
+import { ROUTES } from "../../utils/data";
 
 function ResetPassword() {
   const [form, setValue] = useState({
@@ -24,7 +25,7 @@ function ResetPassword() {
 
   useEffect(() => {
     if (authorized || !changePasswordRequestSent) {
-      navigate('/');
+      navigate(ROUTES.main);
     }
   }, [authorized, navigate, changePasswordRequestSent]);
 
@@ -40,6 +41,7 @@ function ResetPassword() {
       evt.preventDefault();
       if (form.password !== '' || form.token !== '') {
         dispatch(resetUserPassword(form));
+        navigate(ROUTES.login);
       }
     }, [dispatch, form]
   );
@@ -94,7 +96,7 @@ function ResetPassword() {
       </form>
 
       <p className="text text_type_main-default text_color_inactive">
-        Вспомнили пароль? <Link to='/login' className={styles.link}>Войти</Link>
+        Вспомнили пароль? <Link to={ROUTES.login} className={styles.link}>Войти</Link>
       </p>
 
     </section>
