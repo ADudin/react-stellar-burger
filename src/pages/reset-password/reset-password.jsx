@@ -36,7 +36,7 @@ function ResetPassword() {
     });
   };
 
-  const resetPassword = useCallback(
+  const onSubmit = useCallback(
     evt => {
       evt.preventDefault();
       if (form.password !== '' || form.token !== '') {
@@ -57,42 +57,40 @@ function ResetPassword() {
 
       <h1 className="text text_type_main-large">Восстановление пароля</h1>
 
-      <form className={`${styles.form} pb-20`}>
-        <label>
-          <PasswordInput
-            type='password'
-            placeholder='Введите новый пароль'
-            onChange={onChange}
-            icon='ShowIcon'
-            value={form.password}
-            name='password'
-            size='default'
-            extraClass='mt-6'
-          />
-        </label>
-        <label>
-          <Input
-            type='text'
-            placeholder='Введите код из письма'
-            onChange={onChange}
-            value={form.token}
-            name='token'
-            error={false}
-            errorText='Ошибка'
-            size='default'
-            extraClass='mt-6'
-          />
-        </label>
+      <form onSubmit={onSubmit} className={`${styles.form} pb-20`}>
+        
+        <PasswordInput
+          type='password'
+          placeholder='Введите новый пароль'
+          onChange={onChange}
+          icon='ShowIcon'
+          value={form.password}
+          name='password'
+          size='default'
+          extraClass='mt-6'
+        />
+        
+        <Input
+          type='text'
+          placeholder='Введите код из письма'
+          onChange={onChange}
+          value={form.token}
+          name='token'
+          error={false}
+          errorText='Ошибка'
+          size='default'
+          extraClass='mt-6'
+        />
 
         <Button
           htmlType='submit'
           type='primary'
           extraClass='mt-6'
           size='medium'
-          onClick={resetPassword}
         >
           Сохранить
         </Button>
+        
       </form>
 
       <p className="text text_type_main-default text_color_inactive">

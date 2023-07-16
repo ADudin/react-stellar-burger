@@ -33,7 +33,9 @@ function App() {
   };
 
   useEffect(() => {
-    dispatch(checkUserAuth());
+    if (localStorage.getItem('accessToken')) {
+      dispatch(checkUserAuth());
+    }
   }, [dispatch]);
 
   return (

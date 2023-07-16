@@ -88,32 +88,32 @@ function Profile() {
 
       </div>
 
-      <form>
+      <form onSubmit={onSubmit}>
 
-          <Input
-            type='text'
-            placeholder='Имя'
-            onChange={onChange}
-            value={form.name}
-            name='name'
-            error={false}
-            errorText='Ошибка'
-            size='default'
-            icon='EditIcon'
-          />
+        <Input
+          type='text'
+          placeholder='Имя'
+          onChange={onChange}
+          value={form.name}
+          name='name'
+          error={false}
+          errorText='Ошибка'
+          size='default'
+          icon='EditIcon'
+        />
 
-          <Input
-            type='email'
-            placeholder='Логин'
-            onChange={onChange}
-            value={form.email}
-            name='email'
-            error={false}
-            errorText='Ошибка'
-            size='default'
-            extraClass='mt-6'
-            icon='EditIcon'
-          />
+        <Input
+          type='email'
+          placeholder='Логин'
+          onChange={onChange}
+          value={form.email}
+          name='email'
+          error={false}
+          errorText='Ошибка'
+          size='default'
+          extraClass='mt-6'
+          icon='EditIcon'
+        />
 
         <Input
           type='password'
@@ -145,7 +145,6 @@ function Profile() {
             htmlType='submit'
             type='primary'
             size='medium'
-            onClick={onSubmit}
           >
             Сохранить
           </Button>

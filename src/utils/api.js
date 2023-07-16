@@ -27,18 +27,6 @@ export function getIngredients() {
   });
 };
 
-export function postOrder(orderData) {
-  return request(orderPostEndPoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      ingredients: orderData
-    })
-  });
-};
-
 export function postUserRegistration(data) {
   return request(userRegistartionEndPoint, {
     method: 'POST',
@@ -155,6 +143,19 @@ export function patchUserData(data) {
       name: data.name,
       email: data.email,
       password: data.password
+    })
+  });
+};
+
+export function postOrder(orderData) {
+  return fetchWithRefresh(orderPostEndPoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: localStorage.getItem('accessToken')
+    },
+    body: JSON.stringify({
+      ingredients: orderData
     })
   });
 };

@@ -29,7 +29,7 @@ function Login() {
     });
   }
 
-  const login = useCallback(
+  const onSubmit = useCallback(
     evt => {
       evt.preventDefault();
       if (form.email !== '' && form.password !== '') {
@@ -49,42 +49,40 @@ function Login() {
 
       <h1 className="text text_type_main-large">Вход</h1>
 
-      <form className={`${styles.form} pb-20`}>
-        <label>
-          <EmailInput
-            type='email'
-            placeholder='E-mail'
-            onChange={onChange}
-            value={form.email}
-            name='email'
-            error={false}
-            errorText='Ошибка'
-            size='default'
-            extraClass='mt-6'
-          />
-        </label>
-        <label>
-          <PasswordInput
-            type='password'
-            placeholder='Пароль'
-            onChange={onChange}
-            icon='ShowIcon'
-            value={form.password}
-            name='password'
-            size='default'
-            extraClass='mt-6'
-          />
-        </label>
+      <form onSubmit={onSubmit} className={`${styles.form} pb-20`}>
+        
+        <EmailInput
+          type='email'
+          placeholder='E-mail'
+          onChange={onChange}
+          value={form.email}
+          name='email'
+          error={false}
+          errorText='Ошибка'
+          size='default'
+          extraClass='mt-6'
+        />
+
+        <PasswordInput
+          type='password'
+          placeholder='Пароль'
+          onChange={onChange}
+          icon='ShowIcon'
+          value={form.password}
+          name='password'
+          size='default'
+          extraClass='mt-6'
+        />
 
         <Button
           htmlType='submit'
           type='primary'
           extraClass='mt-6'
           size='medium'
-          onClick={login}
         >
           Войти
         </Button>
+        
       </form>
 
       <p className="text text_type_main-default text_color_inactive">
