@@ -6,6 +6,7 @@ const userLoginEndPoint = 'auth/login';
 const userLogoutEndPoint = 'auth/logout';
 const refreshUserTokenEndPoint = 'auth/token';
 const getUserEndPoint = 'auth/user';
+const updateUserDataEndPoint = 'auth/user';
 const forgotPasswordEndPoint = 'password-reset';
 const resetPasswordEndPoint = 'password-reset/reset';
 
@@ -140,5 +141,20 @@ export function getUser() {
       'Content-Type': 'application/json',
       authorization: localStorage.getItem('accessToken')
     },
+  });
+};
+
+export function patchUserData(data) {
+  return fetchWithRefresh(updateUserDataEndPoint, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: localStorage.getItem('accessToken')
+    },
+    body: JSON.stringify({
+      name: data.name,
+      email: data.email,
+      password: data.password
+    })
   });
 };

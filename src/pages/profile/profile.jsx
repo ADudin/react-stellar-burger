@@ -9,7 +9,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { ROUTES } from "../../utils/data";
-import { logoutUser } from "../../services/actions/user";
+import { logoutUser, updateUserData } from "../../services/actions/user";
 
 function Profile() {
   const { name, email } = useSelector(state => state.user);
@@ -35,6 +35,10 @@ function Profile() {
       password: ''
     });
   };
+
+  const onSubmit = () => {
+    dispatch(updateUserData(form));
+  }
 
   const onLogout = () => {
     const refreshToken = localStorage.getItem('refreshToken');
@@ -141,7 +145,7 @@ function Profile() {
             htmlType='submit'
             type='primary'
             size='medium'
-            onClick={() => {}}
+            onClick={onSubmit}
           >
             Сохранить
           </Button>

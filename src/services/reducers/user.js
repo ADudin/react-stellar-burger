@@ -6,7 +6,8 @@ import {
   POST_USER_LOGOUT_SUCCESS,
   POST_USER_FOGOT_PASSWORD_SUCCESS,
   POST_USER_RESET_PASSWORD_SUCCESS,
-  GET_USER_SUCCESS
+  GET_USER_SUCCESS,
+  UPDATE_USER_DATA_SUCCESS
 } from "../actions/user";
 
 const initialState = {
@@ -88,6 +89,15 @@ export const userReducer = (state = initialState, action) => {
         email: action.payload.user.email,
         authorized: true
       };
+    }
+    case UPDATE_USER_DATA_SUCCESS: {
+      return {
+        ...state,
+        userRequest: false,
+        userRequestFailed: false,
+        name: action.payload.user.name,
+        email: action.payload.user.email
+      }
     }
     default: {
       return state;

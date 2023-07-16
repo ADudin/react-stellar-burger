@@ -4,13 +4,15 @@ import {
   postUserLogout,
   postUserForgotPassword,
   postUserResetPassword,
-  getUser
+  getUser,
+  patchUserData
 } from "../../utils/api";
 
 export const POST_USER_REQUEST = 'POST_USER_REQUEST';
 export const POST_USER_REGISTRATION_SUCCESS = 'POST_USER_REGISTRATION_SUCCESS';
 export const POST_USER_REQUEST_FAILED = 'POST_USER_REQUEST_FAILED';
 export const POST_USER_LOGIN_SUCCESS = 'POST_USER_LOGIN_SUCCESS';
+export const UPDATE_USER_DATA_SUCCESS = 'UPDATE_USER_DATA_SUCCESS';
 export const POST_USER_LOGOUT_SUCCESS = 'POST_USER_LOGOUT_SUCCESS';
 export const POST_USER_FOGOT_PASSWORD_SUCCESS = 'POST_USER_FOGOT_PASSWORD_SUCCESS';
 export const POST_USER_RESET_PASSWORD_SUCCESS = 'POST_USER_RESET_PASSWORD_SUCCESS';
@@ -136,6 +138,28 @@ export function checkUserAuth() {
       if (res.success) {
         dispatch({
           type: GET_USER_SUCCESS,
+          payload: res
+        });
+      } else {
+        dispatch({
+          type: POST_USER_REQUEST_FAILED
+        });
+      }
+    }).catch(err => {
+      dispatch({
+        type: POST_USER_REQUEST_FAILED
+      });
+    });
+  };
+};
+
+export function updateUserData(data) {
+  return function(dispatch) {
+    dispatch({ type: POST_USER_REQUEST });
+    patchUserData(data).then(res => {
+      if (res.success) {
+        dispatch({
+          type: UPDATE_USER_DATA_SUCCESS,
           payload: res
         });
       } else {
