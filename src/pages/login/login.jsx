@@ -1,6 +1,6 @@
 import styles from "./login.module.css";
 import { Link } from "react-router-dom";
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { 
@@ -12,9 +12,10 @@ import {
 import Loader from "../../components/loader/loader";
 import { loginUser } from "../../services/actions/user";
 import { ROUTES } from "../../utils/data";
+import { useForm } from "../../hooks/useForm";
 
 function Login() {
-  const [form, setValue] = useState({
+  const { values, handleChange } = useForm({
     email: '',
     password: ''
   });
@@ -22,20 +23,13 @@ function Login() {
   const { userRequest } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
-  const onChange = evt => {
-    setValue({
-      ...form,
-      [evt.target.name]: evt.target.value
-    });
-  }
-
   const onSubmit = useCallback(
     evt => {
       evt.preventDefault();
-      if (form.email !== '' && form.password !== '') {
-        dispatch(loginUser(form));
+      if (values.email !== '' && values.password !== '') {
+        dispatch(loginUser(values));
       }
-    }, [dispatch, form]
+    }, [dispatch, values]
   );
 
   if (userRequest) {
@@ -54,8 +48,8 @@ function Login() {
         <EmailInput
           type='email'
           placeholder='E-mail'
-          onChange={onChange}
-          value={form.email}
+          onChange={handleChange}
+          value={values.email}
           name='email'
           error={false}
           errorText='Ошибка'
@@ -66,9 +60,9 @@ function Login() {
         <PasswordInput
           type='password'
           placeholder='Пароль'
-          onChange={onChange}
+          onChange={handleChange}
           icon='ShowIcon'
-          value={form.password}
+          value={values.password}
           name='password'
           size='default'
           extraClass='mt-6'

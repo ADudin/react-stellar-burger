@@ -1,6 +1,6 @@
 import styles from "./reset-password.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
@@ -12,9 +12,10 @@ import {
 import Loader from "../../components/loader/loader";
 import { resetUserPassword } from "../../services/actions/user";
 import { ROUTES } from "../../utils/data";
+import { useForm } from "../../hooks/useForm";
 
 function ResetPassword() {
-  const [form, setValue] = useState({
+  const { values, handleChange } = useForm({
     password: '',
     token: ''
   });
@@ -29,21 +30,14 @@ function ResetPassword() {
     }
   }, [authorized, navigate, changePasswordRequestSent]);
 
-  const onChange = evt => {
-    setValue({
-      ...form,
-      [evt.target.name]: evt.target.value
-    });
-  };
-
   const onSubmit = useCallback(
     evt => {
       evt.preventDefault();
-      if (form.password !== '' || form.token !== '') {
-        dispatch(resetUserPassword(form));
+      if (values.password !== '' || values.token !== '') {
+        dispatch(resetUserPassword(values));
         navigate(ROUTES.login);
       }
-    }, [dispatch, form, navigate]
+    }, [dispatch, values, navigate]
   );
 
   if (userRequest) {
@@ -62,9 +56,9 @@ function ResetPassword() {
         <PasswordInput
           type='password'
           placeholder='Введите новый пароль'
-          onChange={onChange}
+          onChange={handleChange}
           icon='ShowIcon'
-          value={form.password}
+          value={values.password}
           name='password'
           size='default'
           extraClass='mt-6'
@@ -73,8 +67,8 @@ function ResetPassword() {
         <Input
           type='text'
           placeholder='Введите код из письма'
-          onChange={onChange}
-          value={form.token}
+          onChange={handleChange}
+          value={values.token}
           name='token'
           error={false}
           errorText='Ошибка'

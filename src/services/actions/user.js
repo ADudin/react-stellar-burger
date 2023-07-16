@@ -8,6 +8,8 @@ import {
   patchUserData
 } from "../../utils/api";
 
+import { TOKENS } from "../../utils/data";
+
 export const POST_USER_REQUEST = 'POST_USER_REQUEST';
 export const POST_USER_REGISTRATION_SUCCESS = 'POST_USER_REGISTRATION_SUCCESS';
 export const POST_USER_REQUEST_FAILED = 'POST_USER_REQUEST_FAILED';
@@ -23,8 +25,8 @@ export function registerUser(data) {
     dispatch({ type: POST_USER_REQUEST });
     postUserRegistration(data).then(res => {
       if (res.success) {
-        localStorage.setItem("accessToken", res.accessToken);
-        localStorage.setItem("refreshToken", res.refreshToken);
+        localStorage.setItem(TOKENS.accessToken, res.accessToken);
+        localStorage.setItem(TOKENS.refreshToken, res.refreshToken);
         dispatch({
           type: POST_USER_REGISTRATION_SUCCESS,
           payload: res
@@ -47,8 +49,8 @@ export function loginUser(data) {
     dispatch({ type: POST_USER_REQUEST });
     postUserLogin(data).then(res => {
       if (res.success) {
-        localStorage.setItem('accessToken', res.accessToken);
-        localStorage.setItem('refreshToken', res.refreshToken);
+        localStorage.setItem(TOKENS.accessToken, res.accessToken);
+        localStorage.setItem(TOKENS.refreshToken, res.refreshToken);
         dispatch({
           type: POST_USER_LOGIN_SUCCESS,
           payload: res
@@ -71,8 +73,8 @@ export function logoutUser(data) {
     dispatch({ type: POST_USER_REQUEST });
     postUserLogout(data).then(res => {
       if (res.success) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem(TOKENS.accessToken);
+        localStorage.removeItem(TOKENS.refreshToken);
         dispatch({
           type: POST_USER_LOGOUT_SUCCESS
         });

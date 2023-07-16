@@ -1,5 +1,4 @@
 import styles from "./profile.module.css";
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 
@@ -8,40 +7,35 @@ import {
   Button
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { ROUTES } from "../../utils/data";
+import { ROUTES, TOKENS } from "../../utils/data";
 import { logoutUser, updateUserData } from "../../services/actions/user";
+import { useForm } from "../../hooks/useForm";
 
 function Profile() {
   const { name, email } = useSelector(state => state.user);
-  const dispatch = useDispatch();
-
-  const [form, setValue] = useState({
+  const { values, handleChange, setValues } = useForm({
     name: name,
     email: email,
     password: ''
   });
 
-  const onChange = evt => {
-    setValue({
-      ...form,
-      [evt.target.name]: evt.target.value
-    });
-  };
+  const dispatch = useDispatch();
 
   const onReset = () => {
-    setValue({
+    setValues({
       name: name,
       email: email,
       password: ''
     });
   };
 
-  const onSubmit = () => {
-    dispatch(updateUserData(form));
+  const onSubmit = (evt) => {
+    evt.preventDefault();
+    dispatch(updateUserData(values));
   }
 
   const onLogout = () => {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem(TOKENS.refreshToken);
     dispatch(logoutUser(refreshToken));
   };
 
@@ -93,8 +87,8 @@ function Profile() {
         <Input
           type='text'
           placeholder='Имя'
-          onChange={onChange}
-          value={form.name}
+          onChange={handleChange}
+          value={values.name}
           name='name'
           error={false}
           errorText='Ошибка'
@@ -105,8 +99,8 @@ function Profile() {
         <Input
           type='email'
           placeholder='Логин'
-          onChange={onChange}
-          value={form.email}
+          onChange={handleChange}
+          value={values.email}
           name='email'
           error={false}
           errorText='Ошибка'
@@ -118,16 +112,16 @@ function Profile() {
         <Input
           type='password'
           placeholder='Пароль'
-          onChange={onChange}
+          onChange={handleChange}
           icon='EditIcon'
-          value={form.password}
+          value={values.password}
           name='password'
           size='default'
           extraClass='mt-6'
         />
 
         <div className={
-          form.name === name && form.email === email && form.password === '' ?
+          values.name === name && values.email === email && values.password === '' ?
           `${styles.buttons__container}` :
           `${styles.buttons__container_active} mt-6`
         }>

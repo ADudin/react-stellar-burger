@@ -18,7 +18,7 @@ import ForgotPassword from "../../pages/fogot-password/fogot-password";
 import ResetPassword from "../../pages/reset-password/reset-password";
 import Profile from "../../pages/profile/profile";
 
-import { ROUTES } from "../../utils/data";
+import { ROUTES, TOKENS } from "../../utils/data";
 import { checkUserAuth } from "../../services/actions/user";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route";
 
@@ -33,7 +33,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
+    if (localStorage.getItem(TOKENS.accessToken)) {
       dispatch(checkUserAuth());
     }
   }, [dispatch]);

@@ -1,3 +1,5 @@
+import { TOKENS } from "./data";
+
 const baseUrl = 'https://norma.nomoreparties.space/api';
 const ingredientsEndPoint = 'ingredients';
 const orderPostEndPoint = 'orders';
@@ -98,7 +100,7 @@ export const refreshToken = () => {
       "Content-Type": "application/json;charset=utf-8",
     },
     body: JSON.stringify({
-      token: localStorage.getItem("refreshToken"),
+      token: localStorage.getItem(TOKENS.refreshToken),
     })
   });
 };
@@ -112,8 +114,8 @@ export const fetchWithRefresh = async (endpoint, options) => {
       if (!refreshData.success) {
         return Promise.reject(refreshData);
       }
-      localStorage.setItem('refreshToken', refreshData.refreshToken);
-      localStorage.setItem('accessToken', refreshData.accessToken);
+      localStorage.setItem(TOKENS.refreshToken, refreshData.refreshToken);
+      localStorage.setItem(TOKENS.accessToken, refreshData.accessToken);
       options.headers.authorization = refreshData.accessToken;
       return await request(endpoint, options); // повторяем запрос
     } else {
@@ -127,7 +129,7 @@ export function getUser() {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      authorization: localStorage.getItem('accessToken')
+      authorization: localStorage.getItem(TOKENS.accessToken)
     },
   });
 };
@@ -137,7 +139,7 @@ export function patchUserData(data) {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      authorization: localStorage.getItem('accessToken')
+      authorization: localStorage.getItem(TOKENS.accessToken)
     },
     body: JSON.stringify({
       name: data.name,
@@ -152,7 +154,7 @@ export function postOrder(orderData) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      authorization: localStorage.getItem('accessToken')
+      authorization: localStorage.getItem(TOKENS.accessToken)
     },
     body: JSON.stringify({
       ingredients: orderData

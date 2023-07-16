@@ -10,3 +10,8 @@ export const ROUTES = {
    ingredient: '/ingredients/:ingredientId',
    error: '*'
 }
+
+export const TOKENS = {
+   accessToken: 'accessToken',
+   refreshToken: 'refreshToken'
+};

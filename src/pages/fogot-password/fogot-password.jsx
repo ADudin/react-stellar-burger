@@ -1,6 +1,6 @@
 import styles from "./fogot-password.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { 
@@ -11,13 +11,14 @@ import {
 import Loader from "../../components/loader/loader";
 import { forgotUserPassword } from "../../services/actions/user";
 import { ROUTES } from "../../utils/data";
+import { useForm } from "../../hooks/useForm";
 
 function ForgotPassword() {
-  const [form, setValue] = useState({
+  const { userRequest, changePasswordRequestSent } = useSelector(state => state.user);
+  const { values, handleChange } = useForm({
     email: ''
   });
 
-  const { userRequest, changePasswordRequestSent } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,20 +28,13 @@ function ForgotPassword() {
     }
   }, [navigate, changePasswordRequestSent]);
 
-  const onChange = evt => {
-    setValue ({
-      ...form,
-      [evt.target.name]: evt.target.value
-    });
-  };
-
   const onSubmit = useCallback(
     evt => {
       evt.preventDefault();
-      if (form.email !== '') {
-        dispatch(forgotUserPassword(form));
+      if (values.email !== '') {
+        dispatch(forgotUserPassword(values));
       }
-    }, [dispatch, form]
+    }, [dispatch, values]
   );
 
   if (userRequest) {
@@ -59,8 +53,8 @@ function ForgotPassword() {
         <EmailInput
           type='email'
           placeholder='E-mail'
-          onChange={onChange}
-          value={form.email}
+          onChange={handleChange}
+          value={values.email}
           name='email'
           error={false}
           errorText='Ошибка'
