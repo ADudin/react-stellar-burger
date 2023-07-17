@@ -1,0 +1,64 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
+  column-gap: 60px;
+  margin: auto;
+}
+
+.navigation {
+  width: 320px;
+}
+
+.links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link {
+  min-height: 64px;
+  text-decoration: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  transition: all .2s linear;
+}
+
+.link_active {
+  color: white;
+}
+
+.link:active {
+  color: white;
+}
+
+.paragraph {
+  opacity: 0.4;
+}
+
+.buttons__container {
+  display: none;
+}
+
+.buttons__container_active {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.button {
+  color: #4C4CFF;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all .2s linear;
+}
+
+.link:hover,
+.button:hover {
+  opacity: .6;
+}
+
+.button:active {
+  opacity: .3;
+}

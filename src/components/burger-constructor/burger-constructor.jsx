@@ -1,12 +1,13 @@
 import styles from "./burger-constructor.module.css";
 import { useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { 
   ConstructorElement,
   CurrencyIcon,
   Button
-} from '@ya.praktikum/react-developer-burger-ui-components';
+} from "@ya.praktikum/react-developer-burger-ui-components";
 
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
@@ -17,13 +18,16 @@ import { addItem, removeItem, resetItems } from "../../services/actions/burger-c
 import { sendOrder } from "../../services/actions/order";
 import { useDrop } from "react-dnd";
 import { POST_ORDER_FAILED_MESSAGE } from "../../services/actions/order";
+import { ROUTES } from "../../utils/data";
 
 function BurgerConstructor() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const addedItems = useSelector(state => state.addedIngredients);
   const { orderRequest, orderFailed } = useSelector(state => state.order);
+  const { authorized } = useSelector(state => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const bun = addedItems.bun;
   const fillingComponents = addedItems.ingredients;
 
@@ -59,6 +63,9 @@ function BurgerConstructor() {
       orderData.push(bun._id);
     }
 
+    if (!authorized) {
+      return navigate(ROUTES.login);
+    }
     dispatch(sendOrder(orderData));
     setModalVisible(true);
   }
@@ -128,14 +135,17 @@ function BurgerConstructor() {
 
       </div>
 
-      <Modal modalActive={modalVisible} closeModal={closeModal}>
-        { 
-          orderRequest ?
-          <Loader size="large" inverse={true} /> :
-          orderFailed ? <Error errorMessage={POST_ORDER_FAILED_MESSAGE} /> :
-          <OrderDetails />
-        }
-      </Modal>
+      {
+        modalVisible && 
+        <Modal closeModal={closeModal}>
+          { 
+            orderRequest ?
+            <Loader size="large" inverse={true} /> :
+            orderFailed ? <Error errorMessage={POST_ORDER_FAILED_MESSAGE} /> :
+            <OrderDetails />
+          }
+        </Modal>
+      }
 
     </section>
   );
