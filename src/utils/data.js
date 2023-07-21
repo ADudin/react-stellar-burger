@@ -8,6 +8,7 @@ export const ROUTES = {
    orders: '/orders',
    ingredients: '/ingredients',
    ingredient: '/ingredients/:ingredientId',
+   feed: '/feed',
    error: '*'
 }
 
