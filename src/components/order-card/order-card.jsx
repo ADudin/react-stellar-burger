@@ -1,5 +1,5 @@
 import styles from "./order-card.module.css";
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import bun from "../../images/test/bun-01.png";
 import meat from "../../images/test/meat-03.png";
@@ -8,13 +8,21 @@ import mineralRings from "../../images/test/mineral rings.png";
 import sauce from "../../images/test/sauce-03.png";
 import cheese from "../../images/test/cheese.png";
 
-function OrderCard() {
+function OrderCard(props) {
+  const orderData = props.orderData;
+
+  const { number, createdAt } = orderData;
+
   return (
     <li className={`${styles.card} pt-6 pr-6 pb-6 pl-6 mr-2`}>
 
       <div className={styles.card__header}>
-        <span className="text text_type_main-defaulttext text_type_digits-default">#034535</span>
-        <span className="text text_type_main-default text_color_inactive">Сегодня, 16:20 i-GMT+3</span>
+        <span className="text text_type_main-defaulttext text_type_digits-default">
+          {`#${number}`}
+        </span>
+        <span className="text text_type_main-default text_color_inactive">
+          <FormattedDate date={new Date(createdAt)} />
+        </span>
       </div>
 
       <p className="text text_type_main-medium">Death Star Starship Main бургер</p>

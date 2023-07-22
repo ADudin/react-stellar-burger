@@ -1,15 +1,46 @@
 import styles from "./feed.module.css";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { wsOrdersUrl } from "../../utils/data";
+import { wsConnect, wsDisconnect } from "../../services/actions/order-feed";
 
 import OrderCard from "../../components/order-card/order-card";
 
+const orderData = {
+  "ingredients": [
+    "60d3463f7034a000269f45e7",
+    "60d3463f7034a000269f45e9",
+    "60d3463f7034a000269f45e8",
+    "60d3463f7034a000269f45ea"
+  ],
+  "_id": "",
+  "status": "done",
+  "number": "034535",
+  "createdAt": "2021-06-23T14:43:22.587Z",
+  "updatedAt": "2021-06-23T14:43:22.603Z"
+};
+
 function Feed() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(wsConnect(wsOrdersUrl));
+    return () => {
+      dispatch(wsDisconnect());
+    }
+  }, [dispatch]);
+
+  const orders = useSelector(state => state.orderFeed);
+  console.log(orders);
+
   return (
     <main className={`${styles.main} pb-15`}>
 
       <h1 className={`${styles.main__title} text text_type_main-large mt-10`}>Лента заказов</h1>
 
       <ul className={`${styles.list} custom-scroll`}>
-        <OrderCard />
+        <OrderCard orderData={orderData} />
       </ul>
 
       <div className={styles.stats}>
