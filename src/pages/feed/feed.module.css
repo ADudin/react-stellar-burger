@@ -120,3 +120,30 @@
   border-radius: 50%;
   background-color: #000000;
 }
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.ordersBoard {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 36px;
+}
+
+.ordersBoard__list {
+  height: 152px;
+  list-style: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(auto-fit, 24px);
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+.ordersBoard__doneListItem {
+  color: #0CC;
+}
