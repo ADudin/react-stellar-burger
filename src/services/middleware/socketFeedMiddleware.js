@@ -22,22 +22,22 @@ export const socketFeedMiddleware = (wsActions) => {
       }
 
       if (socket) {
-        socket.onOpen = () => {
+        socket.onopen = () => {
           dispatch({ type: onOpen });
         };
 
-        socket.onClose = () => {
+        socket.onclose = () => {
           dispatch({ type: onClose });
         };
 
-        socket.onError = () => {
+        socket.onerror = () => {
           dispatch({ 
             type: onError, 
             payload: 'Error' 
           });
         };
 
-        socket.onMessage = event => {
+        socket.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
 
