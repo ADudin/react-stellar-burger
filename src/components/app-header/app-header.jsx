@@ -33,10 +33,18 @@ function AppHeader() {
             <p className="ml-2 text text_type_main-default">Конструктор</p>
           </NavLink>
 
-          <a href="/" className={`${styles.header__link} ${styles.header__link_disabled} ml-2 pl-5 pr-5`}>
-            <ListIcon type="secondary" />
-            <p className="ml-2 text text_type_main-default text_color_inactive">Лента заказов</p>
-          </a>
+          <NavLink to={ROUTES.feed} className={
+            ({ isActive }) => isActive ?
+            `${styles.header__link} ml-2 pl-5 pr-5` :
+            `${styles.header__link} pl-5 pr-5 text_color_inactive`
+            }>
+              {
+                location.pathname === ROUTES.feed ?
+                <ListIcon type="primary" /> :
+                <ListIcon type="secondary" />
+              }
+            <p className="ml-2 text text_type_main-default">Лента заказов</p>
+          </NavLink>
 
         </nav>
 

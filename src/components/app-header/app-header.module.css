@@ -35,7 +35,3 @@
   color: white;
   opacity: .3;
 }
-
-.header__link_disabled {
-  pointer-events: none;
-}

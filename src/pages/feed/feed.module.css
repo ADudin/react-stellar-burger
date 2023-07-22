@@ -100,7 +100,7 @@
 
 .card__imageWrapper:nth-of-type(6)::before {
   content: '';
-  position: fixed;
+  position: absolute;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -134,7 +134,7 @@
 }
 
 .ordersBoard__list {
-  height: 152px;
+  height: 304px;
   list-style: none;
   display: grid;
   grid-auto-flow: column;
