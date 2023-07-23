@@ -10,18 +10,12 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
 import Loader from "../loader/loader";
 import Error from "../error/error";
-import { useDispatch, useSelector } from "react-redux";
-import { getItems } from "../../services/actions/ingredients";
+import { useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import { GET_ITEMS_FAILED_MESSAGE } from "../../services/actions/ingredients";
 
 function BurgerIngredients() {
   const { items, itemsRequest, itemsFailed } = useSelector(state => state.ingredients);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getItems());
-  }, [dispatch]);
 
   const Tabs = useMemo(() => {
     return {

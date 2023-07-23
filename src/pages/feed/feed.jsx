@@ -2,27 +2,15 @@ import styles from "./feed.module.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { wsOrdersUrl } from "../../utils/data";
+import { wsOrdersUrl, WebsocketStatus } from "../../utils/data";
 import { wsConnect, wsDisconnect } from "../../services/actions/order-feed";
 
 import OrderCard from "../../components/order-card/order-card";
-
-const orderData = {
-  "ingredients": [
-    "60d3463f7034a000269f45e7",
-    "60d3463f7034a000269f45e9",
-    "60d3463f7034a000269f45e8",
-    "60d3463f7034a000269f45ea"
-  ],
-  "_id": "",
-  "status": "done",
-  "number": "034535",
-  "createdAt": "2021-06-23T14:43:22.587Z",
-  "updatedAt": "2021-06-23T14:43:22.603Z"
-};
+import Loader from "../../components/loader/loader";
 
 function Feed() {
   const dispatch = useDispatch();
+  const MAX_RENDERED_ORDER_NUMBERS = 20;
 
   useEffect(() => {
     dispatch(wsConnect(wsOrdersUrl));
@@ -31,8 +19,25 @@ function Feed() {
     }
   }, [dispatch]);
 
-  const orders = useSelector(state => state.orderFeed);
-  console.log(orders);
+  const orderState = useSelector(state => state.orderFeed);
+  const { orders, total, totalToday } = orderState.orders;
+
+  const doneOrdersNumbers = [];
+  const inWorkOrdersNumbers = [];
+  
+  orders && orders.forEach((item) => {
+    if (item.status === 'done') {
+      doneOrdersNumbers.push(item.number);
+    } else {
+      inWorkOrdersNumbers.push(item.number);
+    }
+  });
+
+  if (orderState.status === WebsocketStatus.CONNECTING) {
+    return (
+      <Loader size="large" inverse={true} />
+    );
+  }
 
   return (
     <main className={`${styles.main} pb-15`}>
@@ -40,7 +45,11 @@ function Feed() {
       <h1 className={`${styles.main__title} text text_type_main-large mt-10`}>Лента заказов</h1>
 
       <ul className={`${styles.list} custom-scroll`}>
-        <OrderCard orderData={orderData} />
+        {
+          orders && orders.map(
+            (item) => <OrderCard key={item._id} orderData={item} />
+          )
+        }
       </ul>
 
       <div className={styles.stats}>
@@ -50,20 +59,28 @@ function Feed() {
           <div className={styles.done}>
             <p className="text text_type_main-medium mb-6">Готовы:</p>
             <ul className={styles.ordersBoard__list}>
-              <li className={`${styles.ordersBoard__doneListItem} text text_type_digits-default`}>034533</li>
-              <li className={`${styles.ordersBoard__doneListItem} text text_type_digits-default`}>034532</li>
-              <li className={`${styles.ordersBoard__doneListItem} text text_type_digits-default`}>034530</li>
-              <li className={`${styles.ordersBoard__doneListItem} text text_type_digits-default`}>034527</li>
-              <li className={`${styles.ordersBoard__doneListItem} text text_type_digits-default`}>034525</li>
+              { 
+                doneOrdersNumbers && 
+                doneOrdersNumbers
+                .slice(0, MAX_RENDERED_ORDER_NUMBERS)
+                .map(
+                  (item, i) => <li key={i} className={`${styles.ordersBoard__doneListItem} text text_type_digits-default`}>{item}</li>
+                )
+              }
             </ul>
           </div>
 
           <div className={styles.inWork}>
             <p className="text text_type_main-medium mb-6">В работе:</p>
             <ul className={styles.ordersBoard__list}>
-              <li className="text text_type_digits-default">034538</li>
-              <li className="text text_type_digits-default">034541</li>
-              <li className="text text_type_digits-default">034542</li>
+              {
+                inWorkOrdersNumbers && 
+                inWorkOrdersNumbers
+                .slice(0, MAX_RENDERED_ORDER_NUMBERS)
+                .map(
+                  (item, i) => <li key={i} className="text text_type_digits-default">{item}</li>
+                )
+              }
             </ul>
           </div>
 
@@ -71,12 +88,12 @@ function Feed() {
 
         <div className={styles.completed}>
           <p className="text text_type_main-medium">Выполнено за все время:</p>
-          <p className="text text_type_digits-large">28 752</p>
+          <p className="text text_type_digits-large">{total}</p>
         </div>
 
         <div className={styles.completed}>
           <p className="text text_type_main-medium">Выполнено за сегодня:</p>
-          <p className="text text_type_digits-large">138</p>
+          <p className="text text_type_digits-large">{totalToday}</p>
         </div>
 
       </div>

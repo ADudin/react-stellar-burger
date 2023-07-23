@@ -39,7 +39,7 @@
 }
 
 .ordersBoard__list {
-  height: 304px;
+  height: 312px;
   list-style: none;
   display: grid;
   grid-auto-flow: column;
