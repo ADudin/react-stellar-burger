@@ -83,12 +83,18 @@
 
 .ingredients__count {
   z-index: 2;
-  transform: translate(-42px, 20px);
+  transform: translate(-35px, 18px);
 }
-
-.card__ingredient {
+.card__imageContainer {
   width: 60px;
   height: 60px;
   border-radius: 50%;
   background-color: #000000;
 }
+
+.card__ingredientImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  transform: scale(0.9);
+} 

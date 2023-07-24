@@ -4,12 +4,7 @@ import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burge
 
 import { orderPropType } from "../../utils/prop-types";
 
-import bun from "../../images/test/bun-01.png";
-import meat from "../../images/test/meat-03.png";
-import core from "../../images/test/core.png";
-import mineralRings from "../../images/test/mineral rings.png";
-import sauce from "../../images/test/sauce-03.png";
-import cheese from "../../images/test/cheese.png";
+const MAX_RENDERED_INGREDIENT_IMAGES = 5;
 
 function OrderCard(props) {
   const orderData = props.orderData;
@@ -27,7 +22,18 @@ function OrderCard(props) {
     return acc;
   }, 0);
 
-  //console.log(price);
+  const images = [];
+
+  ingredientsList && ingredients && ingredientsList.forEach((ingredient) => {
+    ingredients.forEach((item) => {
+      if (item === ingredient._id) {
+        images.push({
+          image: ingredient.image_mobile,
+          name: ingredient.name
+        });
+      }
+    });
+  });
 
   return (
     <li className={`${styles.card} pt-6 pr-6 pb-6 pl-6 mr-2`}>
@@ -47,55 +53,41 @@ function OrderCard(props) {
 
         <div className={styles.card__ingredientsContainer}>
 
+          {
+            images.slice(0, MAX_RENDERED_INGREDIENT_IMAGES)
+            .map((item, i) => 
+              <div key={i} className={styles.card__imageWrapper}>
+                <div className={styles.card__imageContainer}>
+                  <img 
+                    className={styles.card__ingredientImage}
+                    src={item.image}
+                    alt={item.name}
+                  />
+                </div>
+              </div>
+            )
+          }
+          {
+            images.length > MAX_RENDERED_INGREDIENT_IMAGES ?
             <div className={styles.card__imageWrapper}>
-              <img 
-                className={styles.card__ingredient}
-                src={bun}
-                alt="bun"
-              />
-            </div>
+              <div className={styles.card__imageContainer}>
+                <img 
+                  className={styles.card__ingredientImage}
+                  src={images[MAX_RENDERED_INGREDIENT_IMAGES].image}
+                  alt={images[MAX_RENDERED_INGREDIENT_IMAGES].name}
+                />
+              </div>
+            </div> :
+            null
+          }
 
-            <div className={styles.card__imageWrapper}>
-              <img 
-                className={styles.card__ingredient}
-                src={meat}
-                alt="meat"
-              />
-            </div>
-
-            <div className={styles.card__imageWrapper}>
-              <img 
-                className={styles.card__ingredient}
-                src={core}
-                alt="core"
-              />
-            </div>
-
-            <div className={styles.card__imageWrapper}>
-              <img 
-                className={styles.card__ingredient}
-                src={mineralRings}
-                alt="mineral rings"
-              />
-            </div>
-
-            <div className={styles.card__imageWrapper}>
-              <img 
-                className={styles.card__ingredient}
-                src={sauce}
-                alt="sauce"
-              />
-            </div>
-
-            <div className={styles.card__imageWrapper}>
-              <img 
-                className={styles.card__ingredient}
-                src={cheese}
-                alt="cheese"
-              />
-            </div>
-
-          <span className={`${styles.ingredients__count} text text_type_main-default`}>+3</span>
+          <span className={`${styles.ingredients__count} text text_type_main-default`}>
+          {
+            images.length > MAX_RENDERED_INGREDIENT_IMAGES ?
+            images.length - MAX_RENDERED_INGREDIENT_IMAGES :
+            ''
+          }
+          </span>
 
         </div>
 
