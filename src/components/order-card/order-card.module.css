@@ -1,4 +1,6 @@
 .card {
+  text-decoration: none;
+  color: inherit;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -33,7 +35,6 @@
 .card__imageWrapper {
   width: 64px;
   height: 64px;
-  grid-column: 1/2;
   display: flex;
   justify-content: center;
   align-items: center;

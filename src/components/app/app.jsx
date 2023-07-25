@@ -18,6 +18,7 @@ import ForgotPassword from "../../pages/fogot-password/fogot-password";
 import ResetPassword from "../../pages/reset-password/reset-password";
 import Profile from "../../pages/profile/profile";
 import Feed from "../../pages/feed/feed";
+import OrderInfo from "../order-info/order-info";
 
 import { getItems } from "../../services/actions/ingredients";
 import { ROUTES, TOKENS } from "../../utils/data";
@@ -64,6 +65,14 @@ function App() {
                   element={
                     <Modal closeModal={handleModalClose}>
                       <IngredientDetails />
+                    </Modal>
+                  }
+                />
+                <Route 
+                  path={ROUTES.order}
+                  element={
+                    <Modal closeModal={handleModalClose}>
+                      <OrderInfo />
                     </Modal>
                   }
                 />

@@ -1,5 +1,6 @@
 import styles from "./order-card.module.css";
 import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { orderPropType } from "../../utils/prop-types";
@@ -7,8 +8,8 @@ import { orderPropType } from "../../utils/prop-types";
 const MAX_RENDERED_INGREDIENT_IMAGES = 5;
 
 function OrderCard(props) {
-  const orderData = props.orderData;
-  const { number, createdAt, name, ingredients } = orderData;
+  const { number, createdAt, name, ingredients, _id } = props.orderData;
+  const location = useLocation();
 
   const ingredientsList = useSelector(state => state.ingredients).items;
   
@@ -36,8 +37,13 @@ function OrderCard(props) {
   });
 
   return (
-    <li className={`${styles.card} pt-6 pr-6 pb-6 pl-6 mr-2`}>
-
+    <li>
+      <Link 
+        key={_id} 
+        to={`/feed/${_id}`}
+        state={{ background: location }}
+        className={`${styles.card} pt-6 pr-6 pb-6 pl-6 mr-2`}
+      >
       <div className={styles.card__header}>
         <span className="text text_type_main-defaulttext text_type_digits-default">
           {`#${number}`}
@@ -97,7 +103,7 @@ function OrderCard(props) {
         </div>
 
       </div>
-
+      </Link>
     </li>
   );
 };
