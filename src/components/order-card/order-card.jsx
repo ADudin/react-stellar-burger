@@ -40,7 +40,7 @@ function OrderCard(props) {
     <li>
       <Link 
         key={_id} 
-        to={`/feed/${_id}`}
+        to={`/feed/${number}`}
         state={{ background: location }}
         className={`${styles.card} pt-6 pr-6 pb-6 pl-6 mr-2`}
       >

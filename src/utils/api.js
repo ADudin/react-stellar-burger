@@ -2,6 +2,7 @@ import { TOKENS } from "./data";
 
 const baseUrl = 'https://norma.nomoreparties.space/api';
 const ingredientsEndPoint = 'ingredients';
+const orderGetEndPoint = 'orders';
 const orderPostEndPoint = 'orders';
 const userRegistartionEndPoint = 'auth/register';
 const userLoginEndPoint = 'auth/login';
@@ -159,5 +160,14 @@ export function postOrder(orderData) {
     body: JSON.stringify({
       ingredients: orderData
     })
+  });
+};
+
+export function getOrder(orderNumber) {
+  return request(`${orderGetEndPoint}/${orderNumber}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
   });
 };

@@ -14,7 +14,7 @@
 }
 
 .list {
-  max-height: 376px;
+  max-height: 304px;
   list-style: none;
   display: flex;
   flex-direction: column;
