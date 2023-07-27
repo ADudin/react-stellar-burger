@@ -79,7 +79,7 @@ function OrderInfo() {
 
       <ul className={`${styles.list} mt-6 custom-scroll`}>
         {
-          ingredients && ingredientsList &&
+          ingredients && ingredientsList && ingredientsData &&
           ingredientsData.map(
             (item) => 
             <li key={item._id} className={styles.listItem}>

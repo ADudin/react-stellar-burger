@@ -19,6 +19,7 @@ import ResetPassword from "../../pages/reset-password/reset-password";
 import Profile from "../../pages/profile/profile";
 import Feed from "../../pages/feed/feed";
 import OrderInfo from "../order-info/order-info";
+import Order from "../../pages/order/order";
 
 import { getItems } from "../../services/actions/ingredients";
 import { ROUTES, TOKENS } from "../../utils/data";
@@ -49,6 +50,7 @@ function App() {
           <Routes location={background || location}>
             <Route path={ROUTES.main} element={<Home />} />
             <Route path={ROUTES.ingredient} element={<Ingredient />} />
+            <Route path={ROUTES.order} element={<Order />} />
             <Route path={ROUTES.login} element={<OnlyUnAuth component={<Login />} />} />
             <Route path={ROUTES.register} element={<OnlyUnAuth component={<Register />} />} />
             <Route path={ROUTES.forgotPassword} element={<OnlyUnAuth component={<ForgotPassword />} />} />

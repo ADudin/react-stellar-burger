@@ -39,7 +39,7 @@ function AppHeader() {
             `${styles.header__link} pl-5 pr-5 text_color_inactive`
             }>
               {
-                location.pathname === ROUTES.feed ?
+                location.pathname.slice(0, ROUTES.feed.length) === ROUTES.feed ?
                 <ListIcon type="primary" /> :
                 <ListIcon type="secondary" />
               }
@@ -56,7 +56,7 @@ function AppHeader() {
           `${styles.header__link} pl-5 pr-5 text_color_inactive`
         }>
           {
-            location.pathname === ROUTES.profile ?
+            location.pathname.slice(0, ROUTES.profile.length) === ROUTES.profile ?
             <ProfileIcon type="primary" /> :
             <ProfileIcon type="secondary" />
           }
