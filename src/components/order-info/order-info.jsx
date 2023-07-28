@@ -88,8 +88,14 @@ function OrderInfo() {
                 <div className={styles.listItem__imageContainer}>
                   <img 
                     className={styles.listItem__image}
-                    src={item.image_mobile}
-                    alt={item.name}
+                    src={ 
+                      item.image_mobile ?
+                      item.image_mobile : ''
+                    }
+                    alt={
+                      item.name ?
+                      item.name : ''
+                    }
                   />
                 </div>
               </div>

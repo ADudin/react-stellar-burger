@@ -17,6 +17,7 @@ import ErrorPage from "../../pages/error/error";
 import ForgotPassword from "../../pages/fogot-password/fogot-password";
 import ResetPassword from "../../pages/reset-password/reset-password";
 import Profile from "../../pages/profile/profile";
+import ProfileUser from "../profile-user/profile-user";
 import Feed from "../../pages/feed/feed";
 import OrderInfo from "../order-info/order-info";
 import Order from "../../pages/order/order";
@@ -55,7 +56,9 @@ function App() {
             <Route path={ROUTES.register} element={<OnlyUnAuth component={<Register />} />} />
             <Route path={ROUTES.forgotPassword} element={<OnlyUnAuth component={<ForgotPassword />} />} />
             <Route path={ROUTES.resetPassword} element={<ResetPassword />} />
-            <Route path={ROUTES.profile} element={<OnlyAuth component={<Profile />} />} />
+            <Route path={ROUTES.profile} element={<OnlyAuth component={<Profile />} />}>
+              <Route path={ROUTES.profile} element={<ProfileUser />} />
+            </Route>
             <Route path={ROUTES.error} element={<ErrorPage />} />
             <Route path={ROUTES.feed} element={<Feed />} />
           </Routes>
