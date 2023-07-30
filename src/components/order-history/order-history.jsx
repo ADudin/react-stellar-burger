@@ -48,7 +48,7 @@ function OrderHistory() {
       {
         orders && orders.map(
           (item) => <OrderCard key={item._id} orderData={item} />
-        )
+        ).reverse()
       }
     </ul>
   );

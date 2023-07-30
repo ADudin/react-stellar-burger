@@ -6,11 +6,12 @@ export const ROUTES = {
    resetPassword: '/reset-password',
    profile: '/profile',
    orderHistory: '/profile/orders',
+   userOrder: '/profile/orders/:id',
    orders: '/orders',
+   feed: '/feed',
    order: '/feed/:id',
    ingredients: '/ingredients',
    ingredient: '/ingredients/:ingredientId',
-   feed: '/feed',
    error: '*'
 }
 

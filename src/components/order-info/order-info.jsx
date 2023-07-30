@@ -8,6 +8,8 @@ import { getOrderData } from '../../services/actions/order';
 import { GET_ORDER_FAILED_MESSAGE } from '../../services/actions/order';
 
 import Loader from '../loader/loader';
+import Error from '../error/error';
+import { GET_ITEMS_FAILED_MESSAGE, getItems } from '../../services/actions/ingredients';
 
 function OrderInfo() {
   const dispatch = useDispatch();
@@ -16,10 +18,12 @@ function OrderInfo() {
   const DONE_STATUS = 'done';
 
   useEffect(() => {
+    dispatch(getItems());
     dispatch(getOrderData(id));
   }, [dispatch, id]);
 
   const { orderData, orderRequest, orderFailed } = useSelector(state => state.order);
+  const { itemsRequest, itemsFailed } = useSelector(state => state.ingredients);
 
   const { name, number, ingredients, status, createdAt } = orderData;
 
@@ -47,7 +51,7 @@ function OrderInfo() {
     })
   };
 
-  if (orderRequest) {
+  if (orderRequest || itemsRequest) {
     return (
       <div className='mt-15 mb-15'>
         <Loader size="large" inverse={true} />
@@ -57,9 +61,13 @@ function OrderInfo() {
 
   if (orderFailed) {
     return (
-      <div className='mt-15 mb-15'>
-      <p className='text text_type_main-medium ml-15'>{GET_ORDER_FAILED_MESSAGE}</p>
-      </div>
+      <Error errorMessage={GET_ORDER_FAILED_MESSAGE} />
+    );
+  }
+
+  if (itemsFailed) {
+    return (
+      <Error errorMessage={GET_ITEMS_FAILED_MESSAGE} />
     );
   }
   

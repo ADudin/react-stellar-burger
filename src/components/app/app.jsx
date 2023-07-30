@@ -53,6 +53,7 @@ function App() {
             <Route path={ROUTES.main} element={<Home />} />
             <Route path={ROUTES.ingredient} element={<Ingredient />} />
             <Route path={ROUTES.order} element={<Order />} />
+            <Route path={ROUTES.userOrder} element={<OnlyAuth component={<Order />} />} />
             <Route path={ROUTES.login} element={<OnlyUnAuth component={<Login />} />} />
             <Route path={ROUTES.register} element={<OnlyUnAuth component={<Register />} />} />
             <Route path={ROUTES.forgotPassword} element={<OnlyUnAuth component={<ForgotPassword />} />} />
@@ -77,6 +78,14 @@ function App() {
                 />
                 <Route 
                   path={ROUTES.order}
+                  element={
+                    <Modal closeModal={handleModalClose}>
+                      <OrderInfo />
+                    </Modal>
+                  }
+                />
+                <Route 
+                  path={ROUTES.userOrder}
                   element={
                     <Modal closeModal={handleModalClose}>
                       <OrderInfo />
