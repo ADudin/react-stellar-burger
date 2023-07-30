@@ -29,6 +29,7 @@ export const orderFeedReducer = (state = initialState, action) => {
     case ORDER_FEED_WS_CLOSE: {
       return {
         ...state,
+        orders: initialState.orders,
         status: WebsocketStatus.OFFLINE
       };
     }

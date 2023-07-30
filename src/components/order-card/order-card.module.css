@@ -98,4 +98,18 @@
   height: 60px;
   object-fit: cover;
   transform: scale(0.9);
-} 
+}
+
+.card__nameContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card__status_inWork {
+  color: #00CCCC;
+}
+
+.card__status_cancelled {
+  color: red;
+}

@@ -4,11 +4,12 @@ import { Link, useLocation } from "react-router-dom";
 import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { orderPropType } from "../../utils/prop-types";
+import { ROUTES } from "../../utils/data";
 
 const MAX_RENDERED_INGREDIENT_IMAGES = 5;
 
 function OrderCard(props) {
-  const { number, createdAt, name, ingredients, _id } = props.orderData;
+  const { number, createdAt, name, ingredients, _id, status } = props.orderData;
   const location = useLocation();
 
   const ingredientsList = useSelector(state => state.ingredients).items;
@@ -52,8 +53,28 @@ function OrderCard(props) {
           <FormattedDate date={new Date(createdAt)} />
         </span>
       </div>
-
-      <p className="text text_type_main-medium">{name}</p>
+      <div className={styles.card__nameContainer}>
+        <p className="text text_type_main-medium">{name}</p>
+        {
+          location.pathname === ROUTES.orderHistory ?
+          <span className={
+            status === 'done' ?
+            `text text_type_main-default` :
+            status === 'pending' || status === 'created' ?
+            `${styles.card__status_inWork} text text_type_main-default` :
+            `${styles.card__status_cancelled} text text_type_main-default`
+          }>
+            {
+              status === 'done' ?
+              'Выполнен' :
+              status === 'pending' || status === 'created' ?
+              'Готовится' :
+              'Отменен'
+            }
+          </span> :
+          null
+        }
+      </div>
 
       <div className={styles.card__components}>
 

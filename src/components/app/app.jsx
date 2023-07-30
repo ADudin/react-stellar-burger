@@ -21,6 +21,7 @@ import ProfileUser from "../profile-user/profile-user";
 import Feed from "../../pages/feed/feed";
 import OrderInfo from "../order-info/order-info";
 import Order from "../../pages/order/order";
+import OrderHistory from "../order-history/order-history";
 
 import { getItems } from "../../services/actions/ingredients";
 import { ROUTES, TOKENS } from "../../utils/data";
@@ -57,7 +58,8 @@ function App() {
             <Route path={ROUTES.forgotPassword} element={<OnlyUnAuth component={<ForgotPassword />} />} />
             <Route path={ROUTES.resetPassword} element={<ResetPassword />} />
             <Route path={ROUTES.profile} element={<OnlyAuth component={<Profile />} />}>
-              <Route path={ROUTES.profile} element={<ProfileUser />} />
+              <Route path={ROUTES.profile} element={<OnlyAuth component={<ProfileUser />} />} />
+              <Route path={ROUTES.orderHistory} element={<OnlyAuth component={<OrderHistory />} />} />
             </Route>
             <Route path={ROUTES.error} element={<ErrorPage />} />
             <Route path={ROUTES.feed} element={<Feed />} />

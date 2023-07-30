@@ -2,7 +2,7 @@ import styles from "./feed.module.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { wsOrdersUrl, WebsocketStatus } from "../../utils/data";
+import { WebsocketStatus, BASE_WS_ORDERS_URL, ALL_WS_ORDERS_ENDPOINT } from "../../utils/data";
 import { wsConnect, wsDisconnect } from "../../services/actions/order-feed";
 
 import OrderCard from "../../components/order-card/order-card";
@@ -13,7 +13,9 @@ function Feed() {
   const MAX_RENDERED_ORDER_NUMBERS = 20;
 
   useEffect(() => {
-    dispatch(wsConnect(wsOrdersUrl));
+    dispatch(wsConnect(
+      `${BASE_WS_ORDERS_URL}${ALL_WS_ORDERS_ENDPOINT}`
+    ));
     return () => {
       dispatch(wsDisconnect());
     }

@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(2, min-content);
   column-gap: 60px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .navigation {
