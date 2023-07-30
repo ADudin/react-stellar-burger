@@ -20,7 +20,6 @@ export const TOKENS = {
    refreshToken: 'refreshToken'
 };
 
-export const wsOrdersUrl = 'wss://norma.nomoreparties.space/orders/all';
 export const BASE_WS_ORDERS_URL = 'wss://norma.nomoreparties.space/orders';
 export const ALL_WS_ORDERS_ENDPOINT = '/all';
 
