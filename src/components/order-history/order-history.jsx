@@ -7,7 +7,6 @@ import { WebsocketStatus, BASE_WS_ORDERS_URL, TOKENS } from "../../utils/data";
 import OrderCard from "../order-card/order-card";
 import Loader from "../loader/loader";
 import Error from "../error/error";
-import { getItems } from "../../services/actions/ingredients";
 import { GET_ITEMS_FAILED_MESSAGE } from "../../services/actions/ingredients";
 
 function OrderHistory() {
@@ -19,19 +18,18 @@ function OrderHistory() {
   }`;
 
   useEffect(() => {
-    dispatch(getItems());
     dispatch(wsConnect(USER_WS_ORDERS_URL));
   
     return () => {
       dispatch(wsDisconnect);
     };
-  }, [dispatch]);
+  }, [dispatch, USER_WS_ORDERS_URL]);
 
   const ordersState = useSelector(state => state.orderFeed);
-  const { itemsRequest, itemsFailed } = useSelector(state => state.ingredients);
+  const { itemsFailed } = useSelector(state => state.ingredients);
   const { orders } = ordersState.orders;
 
-  if (ordersState.status === WebsocketStatus.CONNECTING || itemsRequest) {
+  if (ordersState.status === WebsocketStatus.CONNECTING) {
     return (
       <Loader size="large" inverse={true} />
     );

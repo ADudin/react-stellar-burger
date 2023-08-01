@@ -1,4 +1,4 @@
-export const socketFeedMiddleware = (wsActions) => {
+export const socketMiddleware = (wsActions) => {
   return store => {
     let socket = null;
 

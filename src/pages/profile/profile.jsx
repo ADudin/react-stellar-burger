@@ -39,7 +39,7 @@ function Profile() {
             </li>
 
             <li>
-              <NavLink to={`${ROUTES.profile}${ROUTES.orders}`} className={
+              <NavLink to={ROUTES.orderHistory} className={
                 (data) => data.isActive ?
                 `${styles.link} ${styles.link_active}` :
                 `${styles.link} text_color_inactive`

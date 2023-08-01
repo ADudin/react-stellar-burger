@@ -1,5 +1,5 @@
 import styles from "./app-header.module.css";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 
 import { 
   BurgerIcon,
@@ -48,9 +48,11 @@ function AppHeader() {
 
         </nav>
 
-        <Logo />
+        <Link to={ROUTES.main} className={styles.header__link}>
+          <Logo />
+        </Link>
 
-        <NavLink to={ROUTES.profile} className={
+        <NavLink to={`${ROUTES.profile}`} className={
           ({ isActive }) => isActive ?
           `${styles.header__link} pl-5 pr-5` :
           `${styles.header__link} pl-5 pr-5 text_color_inactive`

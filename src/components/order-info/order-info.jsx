@@ -9,7 +9,7 @@ import { GET_ORDER_FAILED_MESSAGE } from '../../services/actions/order';
 
 import Loader from '../loader/loader';
 import Error from '../error/error';
-import { GET_ITEMS_FAILED_MESSAGE, getItems } from '../../services/actions/ingredients';
+import { GET_ITEMS_FAILED_MESSAGE } from '../../services/actions/ingredients';
 
 function OrderInfo() {
   const dispatch = useDispatch();
@@ -18,7 +18,6 @@ function OrderInfo() {
   const DONE_STATUS = 'done';
 
   useEffect(() => {
-    dispatch(getItems());
     dispatch(getOrderData(id));
   }, [dispatch, id]);
 

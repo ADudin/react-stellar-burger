@@ -43,9 +43,9 @@ function OrderCard(props) {
         key={_id} 
         to={
           location.pathname === ROUTES.feed ?
-          `/feed/${number}` :
+          `${ROUTES.feed}/${number}` :
           location.pathname === ROUTES.orderHistory ?
-          `/profile/orders/${number}` :
+          `${ROUTES.orderHistory}/${number}` :
           null
         }
         state={{ background: location }}

@@ -3,9 +3,13 @@ import { Navigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../../utils/data";
 
 const Protected = ({ onlyUnAuth = false, component }) => {
-  //const isAuthChecked = useSelector(store => store.user.authorized);
+  const isAuthChecked = useSelector(store => store.user.authorized);
   const user = useSelector(store => store.user.name);
   const location = useLocation();
+
+  if (!isAuthChecked) {
+    return null;
+  }
 
   if (onlyUnAuth && user) {
     // Пользователь авторизован, но роут предназначен для неавторизованного пользователя

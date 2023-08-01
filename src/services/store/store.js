@@ -14,7 +14,7 @@ import { orderReducer } from "../reducers/order";
 import { userReducer } from "../reducers/user";
 import { orderFeedReducer } from "../reducers/order-feed";
 
-import { socketFeedMiddleware } from "../middleware/socketFeedMiddleware";
+import { socketMiddleware } from "../middleware/socketMiddleware";
 
 import { 
   ORDER_FEED_CONNECT,
@@ -44,7 +44,7 @@ const composeEnhancers =
 
 const enhancer = composeEnhancers(
   applyMiddleware(thunk), 
-  applyMiddleware(socketFeedMiddleware(orderFeedStatus))
+  applyMiddleware(socketMiddleware(orderFeedStatus))
 );
 
 const rootReducer = combineReducers({
