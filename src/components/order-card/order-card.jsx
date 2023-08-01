@@ -41,13 +41,7 @@ function OrderCard(props) {
     <li>
       <Link 
         key={_id} 
-        to={
-          location.pathname === ROUTES.feed ?
-          `${ROUTES.feed}/${number}` :
-          location.pathname === ROUTES.orderHistory ?
-          `${ROUTES.orderHistory}/${number}` :
-          null
-        }
+        to={`${location.pathname}/${number}`}
         state={{ background: location }}
         className={`${styles.card} pt-6 pr-6 pb-6 pl-6 mr-2`}
       >
