@@ -87,9 +87,13 @@ function App() {
                 <Route 
                   path={ROUTES.userOrder}
                   element={
-                    <Modal closeModal={handleModalClose}>
-                      <OrderInfo />
-                    </Modal>
+                    <OnlyAuth 
+                      component={
+                        <Modal closeModal={handleModalClose}>
+                          <OrderInfo />
+                        </Modal>
+                      }
+                    />
                   }
                 />
               </Routes>
