@@ -9,6 +9,7 @@
 * Redux
 * React DnD
 * React Router
+* WebSocket 
 
 **Описание**
 

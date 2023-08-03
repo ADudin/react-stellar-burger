@@ -1,5 +1,5 @@
 import styles from "./app-header.module.css";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 
 import { 
   BurgerIcon,
@@ -33,22 +33,32 @@ function AppHeader() {
             <p className="ml-2 text text_type_main-default">Конструктор</p>
           </NavLink>
 
-          <a href="/" className={`${styles.header__link} ${styles.header__link_disabled} ml-2 pl-5 pr-5`}>
-            <ListIcon type="secondary" />
-            <p className="ml-2 text text_type_main-default text_color_inactive">Лента заказов</p>
-          </a>
+          <NavLink to={ROUTES.feed} className={
+            ({ isActive }) => isActive ?
+            `${styles.header__link} ml-2 pl-5 pr-5` :
+            `${styles.header__link} pl-5 pr-5 text_color_inactive`
+            }>
+              {
+                location.pathname.slice(0, ROUTES.feed.length) === ROUTES.feed ?
+                <ListIcon type="primary" /> :
+                <ListIcon type="secondary" />
+              }
+            <p className="ml-2 text text_type_main-default">Лента заказов</p>
+          </NavLink>
 
         </nav>
 
-        <Logo />
+        <Link to={ROUTES.main} className={styles.header__link}>
+          <Logo />
+        </Link>
 
-        <NavLink to={ROUTES.profile} className={
+        <NavLink to={`${ROUTES.profile}`} className={
           ({ isActive }) => isActive ?
           `${styles.header__link} pl-5 pr-5` :
           `${styles.header__link} pl-5 pr-5 text_color_inactive`
         }>
           {
-            location.pathname === ROUTES.profile ?
+            location.pathname.slice(0, ROUTES.profile.length) === ROUTES.profile ?
             <ProfileIcon type="primary" /> :
             <ProfileIcon type="secondary" />
           }

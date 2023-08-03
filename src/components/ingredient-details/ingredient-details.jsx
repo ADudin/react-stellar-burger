@@ -1,11 +1,18 @@
 import styles from "./ingredient-details.module.css";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import Loader from "../loader/loader";
 
 function IngredientDetails() {
   const ingredients = useSelector(state => state.ingredients.items);
   const { ingredientId } = useParams();
   const currentItem = ingredients.find(item => item._id === ingredientId);
+
+  if (!currentItem) {
+    return (
+      <Loader size="large" inverse={true} />
+    );
+  };
 
   return (
     <>
