@@ -10,7 +10,7 @@ import {
   CurrencyIcon,
   Counter
 } from '@ya.praktikum/react-developer-burger-ui-components';
-// @ts-ignore
+
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "../../services/types/hooks";
 import { useDrag } from "react-dnd";
